@@ -15,7 +15,6 @@ export(Unit_Struc)
 
 importFrom(deldir, duplicatedxy)
 
-# import(dplyr)
 importFrom(dplyr, arrange)
 importFrom(dplyr, count)
 importFrom(dplyr, desc)
@@ -27,12 +26,9 @@ importFrom(dplyr, mutate)
 importFrom(dplyr, select)
 
 
-
-# import(plyr)
 importFrom(plyr, create_progress_bar)
 importFrom(tidyr, pivot_longer)
 
-# import(stats)
 
 import(tidyverse)
 importFrom(magrittr,"%>%")
