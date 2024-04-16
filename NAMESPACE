@@ -28,7 +28,7 @@ importFrom(dplyr, select)
 
 
 # import(plyr)
-import(plyr, create_progress_bar)
+importFrom(plyr, create_progress_bar)
 
 
 import(stats)
