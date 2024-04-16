@@ -68,6 +68,7 @@
 #' @import dplyr
 #' @import plyr
 #' @import stats
+#' @importFrom plyr create_progress_bar
 
 #' @examples ## 加载内置数据
 #' @examples data(ForestStatTool)
