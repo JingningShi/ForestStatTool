@@ -43,10 +43,10 @@
 
 
 Tag_Remove <- function(Data, Plot, Tag, D){
-  # if(!require("dplyr")){
-    # install.packages("dplyr")
-    # library(dplyr)
-  # }
+  if(!require("dplyr")){
+    install.packages("dplyr")
+    library(dplyr)
+  }
 
   #主要变量合理性检测
   if(sum(is.na(Plot))!=0){

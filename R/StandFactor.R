@@ -99,16 +99,16 @@
 
 StandFactor <- function(D, Dmin = 5, Plot, S, TreeType = NULL, TreeClass = NULL, SP = NULL, H = NULL,
                         D0 = 20, beta = 1.605, V = NULL, Biomass = NULL, Carbon = NULL) {
-  # # 检测dplyr包是否存在，只有不存在时才会安装
-  # if (!require("dplyr")) {
-    # install.packages("dplyr")
-    # library(dplyr)
-  # }
-  # # 检测tidyr包是否存在，只有不存在时才会安装
-  # if (!require("tidyr")) {
-    # install.packages("tidyr")
-    # library(tidyr)
-  # }
+  # 检测dplyr包是否存在，只有不存在时才会安装
+  if (!require("dplyr")) {
+    install.packages("dplyr")
+    library(dplyr)
+  }
+  # 检测tidyr包是否存在，只有不存在时才会安装
+  if (!require("tidyr")) {
+    install.packages("tidyr")
+    library(tidyr)
+  }
 
   # 林分因子基本计算函数
   Dg <- function(x) {

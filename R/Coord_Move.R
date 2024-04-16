@@ -46,10 +46,10 @@
 
 
 Coord_Move <- function(Data, Plot, X, Y, Origin = c(0,0),Range_xy){
-  # if(!require("deldir")){
-    # install.packages("deldir")
-    # library(deldir)
-  # }
+  if(!require("deldir")){
+    install.packages("deldir")
+    library(deldir)
+  }
   #主要变量合理性检测
   if(length(Range_xy)==2){
     RangeX <- Range_xy[1]

@@ -75,14 +75,14 @@
 
 
 CI.nondist <- function(Data=NULL, Plot, Tag, D, SP = NULL, H = NULL, HCB = NULL, CR = NULL, S=0.06, Bind = FALSE){
-  # if(!require("plyr")){
-    # install.packages("plyr")
-    # library(plyr)
-  # }
-  # if(!require("dplyr")){
-    # install.packages("dplyr")
-    # library(dplyr)
-  # }
+  if(!require("plyr")){
+    install.packages("plyr")
+    library(plyr)
+  }
+  if(!require("dplyr")){
+    install.packages("dplyr")
+    library(dplyr)
+  }
 
   #---------计算优势高、优势径,周梦丽论文推荐的方法
   UHUD.f <- function(data,S){
