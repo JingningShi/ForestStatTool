@@ -45,7 +45,7 @@
 #' @return CI1_inter~CI9_inter：9个与距离无关的种间竞争指数
 
 #' @name CI.nondist
-#' @import stats
+
 
 #' @references Wykoff, W.R., Crookston, N.L., Stage, A.R. (1982). User’s guide to the stand prognosis model (Vol. 133). United States Department of Agriculture, Forest Service, Intermountain Forest and Range Experiment Station. General Technical Report. INT-133, pp. 119.
 #' @references Lorimer, C.G. (1983). Tests of age-independent competition indices for individual trees in natural hardwood stands. Forest Ecology and Management, 6: 343-360.
