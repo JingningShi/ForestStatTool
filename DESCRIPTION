@@ -1,0 +1,17 @@
+Package: ForestStatTool
+Type: Package
+Title: 计算林学中的单木和林分指标
+Version: 0.0.1
+Author: Xiao He<hexiaonuist@163.com>, Chaofan Zhou <cfzhou2021@163.com>, Guangshuang Duan:<oliverdgs@163.com>, Mengli Zhou<1257304343@qq.com>, Jingning Shi:<shijingning@hebau.edu.cn>,  Xiangdong Lei<xdlei@ifrit.ac.cn>
+Maintainer: Xiao He<hexiaonuist@163.com>, Chaofan Zhou <cfzhou2021@163.com>, Jingning Shi:<shijingning@hebau.edu.cn>
+Description: ForestStateTool涵盖了数据检查与预处理、计算各项单木层次及林分层次指标的函数，共分为7个大类。这些函数可用于基于样地调查数据计算常见林分因子（如平均胸径、密度、林分高等）、生物多样性因子、竞争指数和空间结构指数等各类指标。
+Encoding: UTF-8
+LazyData: FALSE
+License: MIT + file LICENSE
+Suggests: testthat (>= 3.0.0)
+Config/testthat/edition: 3
+RoxygenNote: 7.3.1
+Depends: R (>= 3.5.0), stats, deldir, dplyr, plyr, tidyr, magrittr,
+        tidyverse
+NeedsCompilation: no
+Packaged: 2024-04-10 07:28:22 UTC; XDLEI
