@@ -59,19 +59,8 @@
 #' @export Eve
 #' @name Eve
 
-#' @importFrom deldir duplicatedxy
-#' @importFrom dplyr arrange
-#' @importFrom dplyr count
-#' @importFrom dplyr desc
-#' @importFrom dplyr filter
-#' @importFrom dplyr group_by
-#' @importFrom dplyr slice_max
-#' @importFrom dplyr left_join
-#' @importFrom dplyr mutate
-#' @importFrom dplyr select
-#' @importFrom plyr create_progress_bar
-#' @importFrom tidyr pivot_longer
-#' @importFrom magrittr "%>%"
+#' @import dplyr
+#' @import stats
 
 #' @examples ## 加载内置数据
 #' @examples data(ForestStatTool)
@@ -85,11 +74,11 @@
 
 
 Eve = function(Plot, D, SP, TreeType = NULL, Dmin = 5,  dClass = NULL, Index='Species'){
-  # # 检测dplyr包是否存在，只有不存在时才会安装
-  # if(!require ('dplyr')){
-    # install.packages("dplyr")
-    # library(dplyr)
-  # }
+  # 检测dplyr包是否存在，只有不存在时才会安装
+  if(!require ('dplyr')){
+    install.packages("dplyr")
+    library(dplyr)
+  }
   # 统计NA的比例，何潇-2022-12-8
   Na.f=function(x){ round(sum(is.na(x))/length(x)*100, 2) }
   # 数据组织

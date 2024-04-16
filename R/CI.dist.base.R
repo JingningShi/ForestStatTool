@@ -64,19 +64,10 @@
 
 #' @export CI.dist.base
 
-#' @importFrom deldir duplicatedxy
-#' @importFrom dplyr arrange
-#' @importFrom dplyr count
-#' @importFrom dplyr desc
-#' @importFrom dplyr filter
-#' @importFrom dplyr group_by
-#' @importFrom dplyr slice_max
-#' @importFrom dplyr left_join
-#' @importFrom dplyr mutate
-#' @importFrom dplyr select
-#' @importFrom plyr create_progress_bar
-#' @importFrom tidyr pivot_longer
-#' @importFrom magrittr "%>%"
+#' @import deldir
+#' @import dplyr
+#' @import plyr
+#' @import stats
 
 #' @examples ## 加载内置数据
 #' @examples data(ForestStatTool)
@@ -94,18 +85,18 @@ CI.dist.base <- function(Data = NULL, Plot, Tag, X, Y, D, SP = NULL, H = NULL, C
                            Neighbor = "number", k = 4, Search_dist = NULL,
                            Shape = "rectangle", Correct = "single",
                            Origin = c(0,0), Range_xy = NULL, Radius = NULL, Buf_dist = 5, Bind = FALSE){
-  # if(!require("deldir")){
-    # install.packages("deldir")
-    # library(deldir)
-  # }
-  # if(!require("plyr")){
-    # install.packages("plyr")
-    # library(plyr)
-  # }
-  # if(!require("dplyr")){
-    # install.packages("dplyr")
-    # library(dplyr)
-  # }
+  if(!require("deldir")){
+    install.packages("deldir")
+    library(deldir)
+  }
+  if(!require("plyr")){
+    install.packages("plyr")
+    library(plyr)
+  }
+  if(!require("dplyr")){
+    install.packages("dplyr")
+    library(dplyr)
+  }
 
 # Shape--样地形状，2种：rectangle（方形）和circle（圆形）；
 # Correct--边缘矫正方法，3种，single（逐株判断法）, buffer（缓冲区法） 和 translation（平移法），用“in”和“out”来区分

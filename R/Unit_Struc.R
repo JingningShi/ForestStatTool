@@ -72,19 +72,10 @@
 #' @export Unit_Struc
 #' @name Unit_Struc
 
-#' @importFrom deldir duplicatedxy
-#' @importFrom dplyr arrange
-#' @importFrom dplyr count
-#' @importFrom dplyr desc
-#' @importFrom dplyr filter
-#' @importFrom dplyr group_by
-#' @importFrom dplyr slice_max
-#' @importFrom dplyr left_join
-#' @importFrom dplyr mutate
-#' @importFrom dplyr select
-#' @importFrom plyr create_progress_bar
-#' @importFrom tidyr pivot_longer
-#' @importFrom magrittr "%>%"
+#' @import deldir
+#' @import dplyr
+#' @import plyr
+#' @import stats
 
 #' @examples ## 加载内置数据
 #' @examples data(ForestStatTool)
@@ -116,18 +107,18 @@
 
 Unit_Struc <- function(Data = NULL, Plot, Tag, X, Y, D, SP, H = NULL, CR = NULL,k = 4, Shape = "rectangle",Correct = "single",
                          Origin = c(0,0), Range_xy = NULL, Radius = NULL, Buf_dist = 5,  Bind = FALSE){
-  # if(!require("deldir")){
-    # install.packages("deldir")
-    # library(deldir)
-  # }
-  # if(!require("plyr")){
-    # install.packages("plyr")
-    # library(plyr)
-  # }
-  # if(!require("dplyr")){
-    # install.packages("dplyr")
-    # library(dplyr)
-  # }
+  if(!require("deldir")){
+    install.packages("deldir")
+    library(deldir)
+  }
+  if(!require("plyr")){
+    install.packages("plyr")
+    library(plyr)
+  }
+  if(!require("dplyr")){
+    install.packages("dplyr")
+    library(dplyr)
+  }
 
   #参数合理性判断
   if(Shape %in% c("rectangle", "circle")){

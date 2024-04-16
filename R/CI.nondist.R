@@ -45,7 +45,7 @@
 #' @return CI1_inter~CI9_inter：9个与距离无关的种间竞争指数
 
 #' @name CI.nondist
-
+#' @import stats
 
 #' @references Wykoff, W.R., Crookston, N.L., Stage, A.R. (1982). User’s guide to the stand prognosis model (Vol. 133). United States Department of Agriculture, Forest Service, Intermountain Forest and Range Experiment Station. General Technical Report. INT-133, pp. 119.
 #' @references Lorimer, C.G. (1983). Tests of age-independent competition indices for individual trees in natural hardwood stands. Forest Ecology and Management, 6: 343-360.
@@ -57,19 +57,9 @@
 
 #' @export CI.nondist
 
-#' @importFrom deldir duplicatedxy
-#' @importFrom dplyr arrange
-#' @importFrom dplyr count
-#' @importFrom dplyr desc
-#' @importFrom dplyr filter
-#' @importFrom dplyr group_by
-#' @importFrom dplyr slice_max
-#' @importFrom dplyr left_join
-#' @importFrom dplyr mutate
-#' @importFrom dplyr select
-#' @importFrom plyr create_progress_bar
-#' @importFrom tidyr pivot_longer
 #' @importFrom magrittr "%>%"
+#' @import dplyr
+#' @import plyr
 
 #' @examples ## 加载内置数据
 #' @examples data(ForestStatTool)
@@ -85,14 +75,14 @@
 
 
 CI.nondist <- function(Data=NULL, Plot, Tag, D, SP = NULL, H = NULL, HCB = NULL, CR = NULL, S=0.06, Bind = FALSE){
-  # if(!require("plyr")){
-    # install.packages("plyr")
-    # library(plyr)
-  # }
-  # if(!require("dplyr")){
-    # install.packages("dplyr")
-    # library(dplyr)
-  # }
+  if(!require("plyr")){
+    install.packages("plyr")
+    library(plyr)
+  }
+  if(!require("dplyr")){
+    install.packages("dplyr")
+    library(dplyr)
+  }
 
   #---------计算优势高、优势径,周梦丽论文推荐的方法
   UHUD.f <- function(data,S){

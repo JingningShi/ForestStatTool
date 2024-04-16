@@ -35,20 +35,9 @@
 #' @export Plot_Divide
 #' @name Plot_Divide
 
-
-#' @importFrom deldir duplicatedxy
-#' @importFrom dplyr arrange
-#' @importFrom dplyr count
-#' @importFrom dplyr desc
-#' @importFrom dplyr filter
-#' @importFrom dplyr group_by
-#' @importFrom dplyr slice_max
-#' @importFrom dplyr left_join
-#' @importFrom dplyr mutate
-#' @importFrom dplyr select
-#' @importFrom plyr create_progress_bar
-#' @importFrom tidyr pivot_longer
-#' @importFrom magrittr "%>%"
+#' @import tidyverse
+#' @import dplyr
+#' @import stats
 
 #' @examples ## 加载内置数据
 #' @examples data(ForestStatTool)
@@ -72,17 +61,16 @@
 
 
 Plot_Divide <- function(Data, Plot, X, Y, Num_xy = NULL, Length_xy = NULL, Origin = c(0,0), Range_xy){
-  
   # 检测dplyr包是否存在，只有不存在时才会安装
-  # if(!require ('dplyr')){
-    # install.packages("dplyr")
-    # #library(dplyr)
-  # }
+  if(!require ('dplyr')){
+    install.packages("dplyr")
+    library(dplyr)
+  }
   # 检测tidyverse包是否存在，只有不存在时才会安装
-  # if(!require ('tidyverse')){
-    # install.packages("tidyverse")
-    # #library(tidyverse)
-  # }
+  if(!require ('tidyverse')){
+    install.packages("tidyverse")
+    library(tidyverse)
+  }
 
   if(length(Range_xy)==2){
     RangeX <- Range_xy[1]

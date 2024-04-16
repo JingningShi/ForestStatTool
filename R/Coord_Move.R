@@ -31,19 +31,8 @@
 #' @export Coord_Move
 #' @name Coord_Move
 
-#' @importFrom deldir duplicatedxy
-#' @importFrom dplyr arrange
-#' @importFrom dplyr count
-#' @importFrom dplyr desc
-#' @importFrom dplyr filter
-#' @importFrom dplyr group_by
-#' @importFrom dplyr slice_max
-#' @importFrom dplyr left_join
-#' @importFrom dplyr mutate
-#' @importFrom dplyr select
-#' @importFrom plyr create_progress_bar
-#' @importFrom tidyr pivot_longer
-#' @importFrom magrittr "%>%"
+#' @import deldir
+#' @import stats
 
 #' @examples ## 加载内置数据
 #' @examples data(ForestStatTool)
@@ -57,10 +46,10 @@
 
 
 Coord_Move <- function(Data, Plot, X, Y, Origin = c(0,0),Range_xy){
-  # if(!require("deldir")){
-    # install.packages("deldir")
-    # library(deldir)
-  # }
+  if(!require("deldir")){
+    install.packages("deldir")
+    library(deldir)
+  }
   #主要变量合理性检测
   if(length(Range_xy)==2){
     RangeX <- Range_xy[1]
