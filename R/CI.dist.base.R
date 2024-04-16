@@ -489,7 +489,7 @@ Hegyi.f<-function(x0,y0,D0,sp0,competition){
   N <- nlevels(factor(data0$Plot))
   # 增加进度条，何潇-2022-11-28
   print("Srart Calculateing")
-  progress.bar <- plyr::create_progress_bar("text")  #plyr包中的create_progress_bar函数创建一个进度条
+  progress.bar <- create_progress_bar("text")  #plyr包中的create_progress_bar函数创建一个进度条
   progress.bar$init(N)   #设置任务数，几个样地
 
   data_all <- data.frame()
