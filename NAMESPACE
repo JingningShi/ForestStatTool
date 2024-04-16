@@ -12,7 +12,8 @@ export(StandFactor)
 export(Tag_Divide)
 export(Tag_Remove)
 export(Unit_Struc)
-import(deldir)
+
+importFrom(deldir, duplicatedxy)
 
 # import(dplyr)
 importFrom(dplyr, arrange)
@@ -29,9 +30,9 @@ importFrom(dplyr, select)
 
 # import(plyr)
 importFrom(plyr, create_progress_bar)
-
+importFrom(tidyr, pivot_longer)
 
 import(stats)
-import(tidyr)
+
 import(tidyverse)
 importFrom(magrittr,"%>%")
