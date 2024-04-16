@@ -28,8 +28,19 @@
 #' @export Coord_Remove
 #' @name Coord_Remove
 
-#' @import deldir
-#' @import dplyr
+#' @importFrom deldir duplicatedxy
+#' @importFrom dplyr arrange
+#' @importFrom dplyr count
+#' @importFrom dplyr desc
+#' @importFrom dplyr filter
+#' @importFrom dplyr group_by
+#' @importFrom dplyr slice_max
+#' @importFrom dplyr left_join
+#' @importFrom dplyr mutate
+#' @importFrom dplyr select
+#' @importFrom plyr create_progress_bar
+#' @importFrom tidyr pivot_longer
+#' @importFrom magrittr "%>%"
 
 #' @examples ## 加载内置数据
 #' @examples data(ForestStatTool)
