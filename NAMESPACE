@@ -13,8 +13,24 @@ export(Tag_Divide)
 export(Tag_Remove)
 export(Unit_Struc)
 import(deldir)
-import(dplyr)
-import(plyr)
+
+# import(dplyr)
+importFrom(dplyr, arrange)
+importFrom(dplyr, count)
+importFrom(dplyr, desc)
+importFrom(dplyr, filter)
+importFrom(dplyr, group_by)
+importFrom(dplyr, slice_max)
+importFrom(dplyr, left_join)
+importFrom(dplyr, mutate)
+importFrom(dplyr, select)
+
+
+
+# import(plyr)
+import(plyr, create_progress_bar)
+
+
 import(stats)
 import(tidyr)
 import(tidyverse)
