@@ -107,18 +107,18 @@
 
 Unit_Struc <- function(Data = NULL, Plot, Tag, X, Y, D, SP, H = NULL, CR = NULL,k = 4, Shape = "rectangle",Correct = "single",
                          Origin = c(0,0), Range_xy = NULL, Radius = NULL, Buf_dist = 5,  Bind = FALSE){
-  if(!require("deldir")){
-    install.packages("deldir")
-    library(deldir)
-  }
-  if(!require("plyr")){
-    install.packages("plyr")
-    library(plyr)
-  }
-  if(!require("dplyr")){
-    install.packages("dplyr")
-    library(dplyr)
-  }
+  # if(!require("deldir")){
+    # install.packages("deldir")
+    # library(deldir)
+  # }
+  # if(!require("plyr")){
+    # install.packages("plyr")
+    # library(plyr)
+  # }
+  # if(!require("dplyr")){
+    # install.packages("dplyr")
+    # library(dplyr)
+  # }
 
   #参数合理性判断
   if(Shape %in% c("rectangle", "circle")){

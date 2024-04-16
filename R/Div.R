@@ -76,11 +76,11 @@
 
 
 Div = function(Plot, D, SP, TreeType = NULL, Dmin = 5,  dClass = NULL, Index = 'Species'){
-  # 检测dplyr包是否存在，只有不存在时才会安装
-  if(!require ('dplyr')){
-    install.packages("dplyr")
-    library(dplyr)
-  }
+  # # 检测dplyr包是否存在，只有不存在时才会安装
+  # if(!require ('dplyr')){
+    # install.packages("dplyr")
+    # library(dplyr)
+  # }
   # 统计NA的比例，何潇-2022-12-8
   Na.f=function(x){ round(sum(is.na(x))/length(x)*100, 2) }
   # 数据组织

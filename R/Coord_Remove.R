@@ -45,14 +45,14 @@
 
 
 Coord_Remove <- function(Data, Plot, X, Y, D){
-  if(!require("deldir")){
-    install.packages("deldir")
-    library(deldir)
-  }
-  if(!require("dplyr")){
-    install.packages("dplyr")
-    library(dplyr)
-  }
+  # if(!require("deldir")){
+    # install.packages("deldir")
+    # library(deldir)
+  # }
+  # if(!require("dplyr")){
+    # install.packages("dplyr")
+    # library(dplyr)
+  # }
   #主要变量合理性检测
   if(sum(is.na(Plot))!=0){
     stop("Missing value (or NA) in 'Plot'.")
