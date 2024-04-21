@@ -1,10 +1,10 @@
 Package: ForestStatTool
 Type: Package
-Title: 计算林学中的单木和林分指标
+Title:  Calculating individual tree and stand indicators in forestry  计算林学中的单木和林分指标
 Version: 0.0.1
 Author: Xiao He<hexiaonuist@163.com>, Chaofan Zhou <cfzhou2021@163.com>, Guangshuang Duan:<oliverdgs@163.com>, Mengli Zhou<1257304343@qq.com>, Jingning Shi:<shijingning@hebau.edu.cn>,  Xiangdong Lei<xdlei@ifrit.ac.cn>
 Maintainer: Xiao He<hexiaonuist@163.com>, Chaofan Zhou <cfzhou2021@163.com>, Jingning Shi:<shijingning@hebau.edu.cn>
-Description: ForestStateTool涵盖了数据检查与预处理、计算各项单木层次及林分层次指标的函数，共分为7个大类。这些函数可用于基于样地调查数据计算常见林分因子（如平均胸径、密度、林分高等）、生物多样性因子、竞争指数和空间结构指数等各类指标。
+Description: ForestStateTool covers functions for data inspection and preprocessing, as well as calculating various indicators of individual tree and stand levels, and is divided into 7 categories. These functions can be used to calculate various indicators such as common stand factors (such as average diameter at breast height, density, stand height), biodiversity factors, competition index, and spatial structure index based on sample survey data. ForestStateTool涵盖了数据检查与预处理、计算各项单木层次及林分层次指标的函数，共分为7个大类。这些函数可用于基于样地调查数据计算常见林分因子（如平均胸径、密度、林分高等）、生物多样性因子、竞争指数和空间结构指数等各类指标。
 Encoding: UTF-8
 LazyData: FALSE
 License: MIT + file LICENSE
@@ -14,4 +14,4 @@ RoxygenNote: 7.3.1
 Depends: R (>= 3.5.0)
 Imports: deldir, plyr, dplyr, tidyr, magrittr, tidyverse
 NeedsCompilation: no
-Packaged: 2024-04-10 07:28:22 UTC; XDLEI
+Packaged: 2024-04-16 06:11:17 UTC; snow
