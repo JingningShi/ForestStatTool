@@ -1,4 +1,4 @@
-#' @title 林分因子计算
+#' @title Stand factors. 林分因子
 
 #' @author Xiao He: hexiaonuist@163.com
 #' @author Chaofan Zhou: cfzhou2021@163.com
@@ -186,13 +186,13 @@ StandFactor <- function(D, Dmin = 5, Plot, S, TreeType = NULL, TreeClass = NULL,
   if(!is.numeric(D)){
     stop("'D' must be numeric.")
   }else if(sum(is.na(D))!=0){
-    print(paste0(Na.f(D), "% Missing value (or NA) in 'D'."))
+    cat(paste0(Na.f(D), "% Missing value (or NA) in 'D'.\n"))
   }
   ba <- pi * D^2 / 40000
   if (!is.null(TreeType)) {
     TT <- as.character(TreeType)
     if(sum(is.na(TT))!=0){
-      print(paste0(Na.f(TT), "% Missing value (or NA) in 'TreeType'."))
+      cat(paste0(Na.f(TT), "% Missing value (or NA) in 'TreeType'.\n"))
     }
   } else {
     TT <- rep(11, length(D))
@@ -200,10 +200,10 @@ StandFactor <- function(D, Dmin = 5, Plot, S, TreeType = NULL, TreeClass = NULL,
   if (!is.null(SP)) {
     SP <- as.character(SP)
     if(sum(is.na(SP))!=0){
-      print(paste0(Na.f(SP), "% Missing value (or NA) in 'SP'."))
+      cat(paste0(Na.f(SP), "% Missing value (or NA) in 'SP'.\n"))
     }
     if (length(unique(SP)) == 1) {
-      print("The 'SP' was only one level. So, the stand factors of the tree species will not be calculated!")
+      cat("The 'SP' was only one level. So, the stand factors of the tree species will not be calculated!\n")
     }
   } else {
     SP <- rep("Pure", length(D))
@@ -214,7 +214,7 @@ StandFactor <- function(D, Dmin = 5, Plot, S, TreeType = NULL, TreeClass = NULL,
     if(!is.numeric(H)){
       stop("'H' must be numeric.")
     }else if(sum(is.na(H))!=0){
-      print(paste0(Na.f(H), "% Missing value (or NA) in 'H'."))
+      cat(paste0(Na.f(H), "% Missing value (or NA) in 'H'.\n"))
     }
   }
   # 检查V
@@ -222,7 +222,7 @@ StandFactor <- function(D, Dmin = 5, Plot, S, TreeType = NULL, TreeClass = NULL,
     if(!is.numeric(V)){
       stop("'V' must be numeric.")
     }else if(sum(is.na(V))!=0){
-      print(paste0(Na.f(V), "% Missing value (or NA) in 'V'."))
+      cat(paste0(Na.f(V), "% Missing value (or NA) in 'V'.\n"))
     }
   }
 
@@ -238,14 +238,14 @@ StandFactor <- function(D, Dmin = 5, Plot, S, TreeType = NULL, TreeClass = NULL,
         stop("Each 'Biomass' must be numeric.")
       } else if(sum(Na.muti.f(Biomass))!=0){
         for (i.col in 1:ncol(as.data.frame(Biomass))) {
-          print(paste0(Na.muti.f(Biomass)[i.col], "% Missing value (or NA) in 'Biomass' col", i.col, "."))
+          cat(paste0(Na.muti.f(Biomass)[i.col], "% Missing value (or NA) in 'Biomass' col", i.col, ".\n"))
         }
       }
     } else{
       if(!is.numeric(Biomass)){
         stop("'Biomass' must be numeric.")
       }else if(sum(is.na(Biomass))!=0){
-        print(paste0(Na.f(Biomass), "% Missing value (or NA) in 'Biomass'."))
+        cat(paste0(Na.f(Biomass), "% Missing value (or NA) in 'Biomass'.\n"))
       }
     }
   }
@@ -256,14 +256,14 @@ StandFactor <- function(D, Dmin = 5, Plot, S, TreeType = NULL, TreeClass = NULL,
         stop("Each 'Carbon' must be numeric.")
       } else if(sum(Na.muti.f(Carbon))!=0){
         for (i.col in 1:ncol(as.data.frame(Carbon))) {
-          print(paste0(Na.muti.f(Carbon)[i.col], "% Missing value (or NA) in 'Carbon' col", i.col, "."))
+          cat(paste0(Na.muti.f(Carbon)[i.col], "% Missing value (or NA) in 'Carbon' col", i.col, ".\n"))
         }
       }
     } else{
       if(!is.numeric(Carbon)){
         stop("'Carbon' must be numeric.")
       }else if(sum(is.na(Carbon))!=0){
-        print(paste0(Na.f(Carbon), "% Missing value (or NA) in 'Carbon'."))
+        cat(paste0(Na.f(Carbon), "% Missing value (or NA) in 'Carbon'.\n"))
       }
     }
   }
@@ -556,7 +556,7 @@ StandFactor <- function(D, Dmin = 5, Plot, S, TreeType = NULL, TreeClass = NULL,
       dominantHd <- data.frame("Plot" = rownames(dominantHd), "Hd" = dominantHd, "Hd_Counts" = dominantHd.Counts)
       Alive.StandFactor3 <- dplyr::left_join(Alive.StandFactor3, dominantHd, by = "Plot")
     } else {
-      print("The dominant height (Ht and Hd) will not be calculated, because not every tree has tree height.")
+      cat("The dominant height (Ht and Hd) will not be calculated, because not every tree has tree height.\n")
     }
   }
 
@@ -794,11 +794,11 @@ StandFactor <- function(D, Dmin = 5, Plot, S, TreeType = NULL, TreeClass = NULL,
 
   # 其他类型木，如健康状态、上下层、目标树和非目标树等不同水平的林分因子
   if (!is.null(TreeClass) & length(unique(TreeClass)) == 1) {
-    print("The 'TreeClass' was only one level, please chack it!")
+    cat("The 'TreeClass' was only one level, please chack it!\n")
   } else{
     TreeClass <- as.character(TreeClass)
     if(sum(is.na(TreeClass))!=0){
-      print(paste0(Na.f(TreeClass), "% Missing value (or NA) in 'TreeClass'."))
+      cat(paste0(Na.f(TreeClass), "% Missing value (or NA) in 'TreeClass'.\n"))
     }
   }
   if (!is.null(TreeClass) & length(unique(TreeClass)) > 1) {

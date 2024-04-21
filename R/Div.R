@@ -1,4 +1,4 @@
-#' @title 多样性计算
+#' @title  Tree species diversity indices. 树种多样性指数
 
 #' @author Xiao He: hexiaonuist@163.com
 #' @author Chaofan Zhou: cfzhou2021@163.com
@@ -87,16 +87,16 @@ Div = function(Plot, D, SP, TreeType = NULL, Dmin = 5,  dClass = NULL, Index = '
   data <- data.frame('Plot'=as.character(Plot), 'SP'=as.character(SP),  'd'=D)
   # 变量检查
   if(sum(is.na(data$Plot))!=0){
-    print(paste0(Na.f(data$Plot), "% Missing value (or NA) in 'Plot'."))
+    cat(paste0(Na.f(data$Plot), "% Missing value (or NA) in 'Plot'.\n"))
   }
   if(!is.numeric(data$d)){
     stop("'D' must be numeric.")
   }else if(sum(is.na(data$d))!=0){
-    print(paste0(Na.f(data$d), "% Missing value (or NA) in 'D'."))
+    cat(paste0(Na.f(data$d), "% Missing value (or NA) in 'D'.\n"))
   }
   if(!is.null(data$SP)){
     if(T %in% is.na(data$SP)){
-      print(paste0(Na.f(data$SP), "Missing value (or NA) in 'SP'."))
+      cat(paste0(Na.f(data$SP), "Missing value (or NA) in 'SP'.\n"))
     }
   }
   if(!is.null(TreeType)){

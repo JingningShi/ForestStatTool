@@ -1,4 +1,4 @@
-#' @title 重复标签处理2
+#' @title Deal with duplicate tags by DBH. 基于胸径的重复标签处理
 
 #' @author Chaofan Zhou: cfzhou2021@163.com
 #' @author Xiao He: hexiao@ifrit.ac.cn
@@ -83,9 +83,9 @@ Tag_Remove <- function(Data, Plot, Tag, D){
     plotall <- rbind(plotall,plotx)
   }
   if(!(T %in% checktags)){
-    print("There are no duplicated Tags!")
+    cat("There are no duplicated Tags!\n")
   }else{
-    print("Duplicated Tags found and have been removed.")
+    cat("Duplicated Tags found and have been removed.\n")
     plotall <- plotall[,!colnames(plotall) %in% c("newTag","DD","duptags")]
     plotall <- dplyr::arrange(plotall,Tag)
     return(plotall)

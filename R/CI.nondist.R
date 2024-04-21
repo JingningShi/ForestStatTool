@@ -1,4 +1,4 @@
-#' @title 与距离无关的竞争指数_9个
+#' @title Distance-independent competition indices. 与距离无关的竞争指数_9个
 
 #' @author Guangshuang Duan: oliverdgs@163.com
 #' @author Xiao He: hexiao@ifrit.ac.cn
@@ -201,35 +201,35 @@ CI.nondist <- function(Data=NULL, Plot, Tag, D, SP = NULL, H = NULL, HCB = NULL,
 
   # 以下3个条件判断有误，何潇修改输出条件，2024-3-9
   if((!"SP"%in%colnames(data))|nlevels(factor(data$SP))==1){
-    print("The 'CIx_intra' and 'CIx_inter' not calculate because 'SP' don't input or the levels of 'SP' equal to 1.")
+    cat("The 'CIx_intra' and 'CIx_inter' not calculate because 'SP' don't input or the levels of 'SP' equal to 1.\n")
   }
   if(!"H"%in%colnames(data)){
-    print("The 'CI8' not calculate because 'H' don't input.")
+    cat("The 'CI8' not calculate because 'H' don't input.\n")
   }
   if(!all("H"%in%colnames(data), "HCB"%in%colnames(data), "CR"%in%colnames(data))){
-    print("The 'CI9' not calculate because 'H', 'HCB' or 'CR' don't input.")
+    cat("The 'CI9' not calculate because 'H', 'HCB' or 'CR' don't input.\n")
   }
 
   #主要变量合理性检测
   # 修改为变量有缺失值为打印，而不是停止，下面有删除NA的操作。何潇2022-12-8
   # 如果参数的类型不对，如D不是数值型，则停止计算。何潇2022-12-8
   if(sum(is.na(data$Plot))!=0){
-    print(paste0(Na.f(data$Plot), "% Missing value (or NA) in 'Plot'."))
+    cat(paste0(Na.f(data$Plot), "% Missing value (or NA) in 'Plot'.\n"))
   }
   if(sum(is.na(data$Tag))!=0){
-    print(paste0(Na.f(data$Tag), "% Missing value (or NA) in 'Tag'."))
+    cat(paste0(Na.f(data$Tag), "% Missing value (or NA) in 'Tag'.\n"))
   }
   ##
   if(!is.numeric(data$D)){
     stop("'D' must be numeric.")
   }else if(sum(is.na(data$D))!=0){
-    print(paste0(Na.f(data$D), "% Missing value (or NA) in 'D'."))
+    cat(paste0(Na.f(data$D), "% Missing value (or NA) in 'D'.\n"))
   }
   ##
   # SP只检查是否有空值
   if(!is.null(data$SP)){
     if(T %in% is.na(data$SP)){
-      print(paste0(Na.f(data$SP), "Missing value (or NA) in 'SP'."))
+      cat(paste0(Na.f(data$SP), "Missing value (or NA) in 'SP'.\n"))
     }
   }
   # H、HCB、CR只有输入了才检查
@@ -237,21 +237,21 @@ CI.nondist <- function(Data=NULL, Plot, Tag, D, SP = NULL, H = NULL, HCB = NULL,
     if(!is.numeric(data$H)){
       stop("'H' must be numeric.")
     }else if(T %in% is.na(data$H)){
-      print(paste0(Na.f(data$H), "% Missing value (or NA) in 'H'."))
+      cat(paste0(Na.f(data$H), "% Missing value (or NA) in 'H'.\n"))
     }
   }
   if(!is.null(data$HCB)){
     if(!is.numeric(data$HCB)){
       stop("'HCB' must be numeric.")
     }else if(T %in% is.na(data$HCB)){
-      print(paste0(Na.f(data$HCB), "% Missing value (or NA) in 'HCB'."))
+      cat(paste0(Na.f(data$HCB), "% Missing value (or NA) in 'HCB'.\n"))
     }
   }
   if(!is.null(data$CR)){
     if(!is.numeric(data$CR)){
       stop("'CR' must be numeric.")
     }else if(T %in% is.na(data$CR)){
-      print(paste0(Na.f(data$HCB), "% Missing value (or NA) in 'CR'."))
+      cat(paste0(Na.f(data$HCB), "% Missing value (or NA) in 'CR'.\n"))
     }
   }
 
@@ -272,7 +272,7 @@ CI.nondist <- function(Data=NULL, Plot, Tag, D, SP = NULL, H = NULL, HCB = NULL,
   #以Plot分组计算竞争指标
   N <- nlevels(factor(data$Plot))
   # 增加进度条，何潇-2022-11-28
-  print("Srart Calculateing")
+  cat("Start calculating: \n")
   progress.bar <- plyr::create_progress_bar("text")  #plyr包中的create_progress_bar函数创建一个进度条
   progress.bar$init(N)   #设置任务数，几个样地
 
@@ -363,10 +363,11 @@ CI.nondist <- function(Data=NULL, Plot, Tag, D, SP = NULL, H = NULL, HCB = NULL,
       }
     }
     # 每计算完一个样地打印一次结果
-    print(paste("Calculated" ,j, ": Plot =", levels(factor(data_jieguo$Plot))[j]))
+    cat("\n")
+    cat(paste("Calculated" ,j, ": Plot =", levels(factor(data_jieguo$Plot))[j]), "\n")
     progress.bar$step() #输出进度条
   }
-
+  cat("\n")
   data_jieguo <- dplyr::select(data_jieguo,Plot,Tag, paste("CI",1:9,sep = ""))
 
 

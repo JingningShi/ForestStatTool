@@ -1,4 +1,4 @@
-#' @title 重复坐标点处理2
+#' @title Deal with duplicate coordinate points by DBH. 基于胸径的重复坐标点处理
 
 #' @author Chaofan Zhou: cfzhou2021@163.com
 #' @author Xiao He: hexiao@ifrit.ac.cn
@@ -98,9 +98,9 @@ Coord_Remove <- function(Data, Plot, X, Y, D){
   }
   # 何潇修改判断条件写法，2024-4-10
   if( !any(checkxy) ){
-    print("There are no duplicated coordinates!")
+    cat("There are no duplicated coordinates!\n")
   }else{
-    print("Duplicated coordinates found and have been removed.")
+    cat("Duplicated coordinates found and have been removed.\n")
     plotall <- plotall[,!colnames(plotall)%in%c("newX","newY","DD","dupxy")]
     plotall <- dplyr::arrange(plotall,Tag)
     return(plotall)

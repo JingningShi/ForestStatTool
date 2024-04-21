@@ -1,4 +1,4 @@
-#' @title 样地分割
+#' @title Plot divide. 样地分割
 
 #' @author Chaofan Zhou: zhouchaofan@ifrit.ac.cn
 #' @author Xiao He: hexiao@ifrit.ac.cn

@@ -1,4 +1,4 @@
-#' @title 重复标签处理1
+#' @title Deal with duplicate tags by creating new tags. 创建新标签的重复标签处理
 
 #' @author Chaofan Zhou: cfzhou2021@163.com
 #' @author Xiao He: hexiao@ifrit.ac.cn
@@ -77,9 +77,9 @@ Tag_Divide <- function(Data, Plot, Tag){
   }
   # if(!(T %in% checktags)){ }# 何潇修改判断语句写法,2024-4-10
   if( !any(checktags) ){
-    print("There are no duplicated Tags!")
+    cat("There are no duplicated Tags!\n")
   }else{
-    print("Duplicated Tags found! Column of 'newTag' was provided in output dataframe.")
+    cat("Duplicated Tags found! Column of 'newTag' was provided in output dataframe.\n")
     return(plotall)
   }
 }

@@ -1,4 +1,4 @@
-#' @title 重复坐标点处理1
+#' @title Deal with duplicate coordinate points by random jitter. 基于随机抖动的重复坐标点处理
 
 #' @author Chaofan Zhou: cfzhou2021@163.com
 #' @author Xiao He: hexiao@ifrit.ac.cn
@@ -106,9 +106,9 @@ Coord_Move <- function(Data, Plot, X, Y, Origin = c(0,0),Range_xy){
   }
   # 何潇修改判断写法，2024-4-10
   if(!any(checkxy)){
-    print("There are no duplicated coordinates!")
+    cat("There are no duplicated coordinates!\n")
   }else{
-    print("Duplicated coordinates found! Column of 'newX' and 'newY' were provided in output dataframe.")
+    cat("Duplicated coordinates found! Column of 'newX' and 'newY' were provided in output dataframe.\n")
     return(plotall)
   }
 }

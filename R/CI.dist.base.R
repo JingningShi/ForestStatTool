@@ -1,4 +1,4 @@
-#' @title 与距离有关的竞争指数_基础版_3个
+#' @title Distance-dependent competition indices. 与距离有关的竞争指数_基础版_3个
 
 #' @author Guangshuang Duan: oliverdgs@163.com
 #' @author Chaofan Zhou: cfzhou2021@163.com
@@ -432,29 +432,29 @@ Hegyi.f<-function(x0,y0,D0,sp0,competition){
   # 修改为变量有缺失值为打印，而不是停止，下面有删除NA的操作。何潇2022-12-8
   # 如果参数的类型不对，如D不是数值型，则停止计算。何潇2022-12-8
   if(sum(is.na(data0$Plot))!=0){
-    print(paste0(Na.f(data0$Plot), "% Missing value (or NA) in 'Plot'."))
+    cat(paste0(Na.f(data0$Plot), "% Missing value (or NA) in 'Plot'.\n"))
   }
   if(sum(is.na(data0$Tag))!=0){
-    print(paste0(Na.f(data0$Tag), "% Missing value (or NA) in 'Tag'."))
+    cat(paste0(Na.f(data0$Tag), "% Missing value (or NA) in 'Tag'.\n"))
   }
   if(sum(is.na(data0$SP))!=0){
-    print(paste0(Na.f(data0$SP), "% Missing value (or NA) in 'SP'."))
+    cat(paste0(Na.f(data0$SP), "% Missing value (or NA) in 'SP'.\n"))
   }
   ##
   if(!is.numeric(data0$X)){
     stop("'X' must be numeric.")
   }else if(sum(is.na(data0$X))!=0){
-    print(paste0(Na.f(data0$X), "% Missing value (or NA) in 'X'."))
+    cat(paste0(Na.f(data0$X), "% Missing value (or NA) in 'X'.\n"))
   }
   if(!is.numeric(data0$Y)){
     stop("'Y' must be numeric.")
   }else if(sum(is.na(data0$Y))!=0){
-    print(paste0(Na.f(data0$Y), "% Missing value (or NA) in 'Y'."))
+    cat(paste0(Na.f(data0$Y), "% Missing value (or NA) in 'Y'.\n"))
   }
   if(!is.numeric(data0$D)){
     stop("'D' must be numeric.")
   }else if(sum(is.na(data0$D))!=0){
-    print(paste0(Na.f(data0$D), "% Missing value (or NA) in 'D'."))
+    cat(paste0(Na.f(data0$D), "% Missing value (or NA) in 'D'.\n"))
   }
   # # H 和CR只有输入了才检查
   # if(!is.null(data0$H)){
@@ -487,7 +487,7 @@ Hegyi.f<-function(x0,y0,D0,sp0,competition){
   #统计样地个数
   N <- nlevels(factor(data0$Plot))
   # 增加进度条，何潇-2022-11-28
-  print("Srart Calculateing")
+  cat("Start calculating: \n")
   progress.bar <- plyr::create_progress_bar("text")  #plyr包中的create_progress_bar函数创建一个进度条
   progress.bar$init(N)   #设置任务数，几个样地
 
@@ -558,9 +558,11 @@ Hegyi.f<-function(x0,y0,D0,sp0,competition){
     }
     data_all <- rbind(data_all, Hegyi.data)
     # 每计算完一个样地打印一次结果
-    print(paste("Calculated" ,i, ": Plot =", levels(factor(data0$Plot))[i]))
+    cat("\n")
+    cat(paste("Calculated" ,i, ": Plot =", levels(factor(data0$Plot))[i]), "\n")
     progress.bar$step() #输出进度条
   }
+  cat("\n")
   if(Correct == "translation"){
     data_all <- dplyr::filter(data_all, in_out == "in")
     }

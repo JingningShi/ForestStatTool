@@ -1,4 +1,4 @@
-#' @title 重要值计算
+#' @title Tree species importance value. 树种重要值
 
 #' @author Xiao He: hexiaonuist@163.com
 #' @author Chaofan Zhou: cfzhou2021@163.com
@@ -45,12 +45,12 @@ IV <- function(D, Plot, SubPlot, SP, TreeType = NULL, Dmin = 5) {
   if(is.null(Plot)){
     stop("'Plot' don't input.")
   }else if(sum(is.na(Plot))!=0){
-    print(paste0(Na.f(Plot), "% Missing value (or NA) in 'Plot'."))
+    cat(paste0(Na.f(Plot), "% Missing value (or NA) in 'Plot'.\n"))
   }
   if(is.null(SubPlot)){
     stop("'SubPlot' don't input.")
   }else if(sum(is.na(SubPlot))!=0){
-    print(paste0(Na.f(SubPlot), "% Missing value (or NA) in 'SubPlot'."))
+    cat(paste0(Na.f(SubPlot), "% Missing value (or NA) in 'SubPlot'.\n"))
   }
   n1 = nlevels(factor(Plot))
   n2 = nlevels(factor(paste0(Plot,"_",SubPlot)))
@@ -60,12 +60,12 @@ IV <- function(D, Plot, SubPlot, SP, TreeType = NULL, Dmin = 5) {
   if(is.null(D)|!is.numeric(D)){
     stop("'D' don't input or 'D' must be numeric.")
   }else if(sum(is.na(D))!=0){
-    print(paste0(Na.f(D), "% Missing value (or NA) in 'D'."))
+    cat(paste0(Na.f(D), "% Missing value (or NA) in 'D'.\n"))
   }
   if(is.null(SP)){
     stop("'SP' don't input.")
   }else if(sum(is.na(SP))!=0){
-    print(paste0(Na.f(SP), "% Missing value (or NA) in 'SP'."))
+    cat(paste0(Na.f(SP), "% Missing value (or NA) in 'SP'.\n"))
   }
 
   Plot <- as.character(Plot)
