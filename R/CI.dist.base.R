@@ -66,7 +66,7 @@
 
 #' @importFrom deldir duplicatedxy
 #' @importFrom dplyr arrange filter left_join mutate 
-#' @importFrom plyr create_progress_bar
+#' @importFrom plyr create_progress_bar progress_text
 #' @import stats
 
 #' @examples ## 加载内置数据

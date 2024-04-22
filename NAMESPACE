@@ -23,7 +23,7 @@ importFrom(dplyr, slice_max)
 importFrom(dplyr, left_join)
 importFrom(dplyr, mutate)
 importFrom(dplyr, select)
-importFrom(plyr, create_progress_bar)
+importFrom(plyr, create_progress_bar, progress_text)
 importFrom(tidyr, pivot_longer)
 importFrom(magrittr,"%>%")
 
