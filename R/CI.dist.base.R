@@ -64,7 +64,7 @@
 
 #' @export CI.dist.base
 
-#' @import deldir
+#' @importFrom deldir duplicatedxy
 #' @importFrom dplyr arrange filter left_join mutate 
 #' @importFrom plyr create_progress_bar
 #' @import stats
