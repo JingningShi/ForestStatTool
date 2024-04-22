@@ -58,8 +58,8 @@
 #' @export CI.nondist
 
 #' @importFrom magrittr "%>%"
-#' @import dplyr
-#' @import plyr
+#' @importFrom dplyr arrange filter left_join mutate select
+#' @importFrom plyr create_progress_bar progress_text
 
 #' @examples ## 加载内置数据
 #' @examples data(ForestStatTool)
@@ -75,18 +75,18 @@
 
 
 CI.nondist <- function(Data=NULL, Plot, Tag, D, SP = NULL, H = NULL, HCB = NULL, CR = NULL, S=0.06, Bind = FALSE){
-  if(!require("plyr")){
-    install.packages("plyr")
-    library(plyr)
-  }
-  if(!require("dplyr")){
-    install.packages("dplyr")
-    library(dplyr)
-  }
+ # if(!require("plyr")){
+ #   install.packages("plyr")
+ #   library(plyr)
+ # }
+ # if(!require("dplyr")){
+ #   install.packages("dplyr")
+ #   library(dplyr)
+ # }
 
   #---------计算优势高、优势径,周梦丽论文推荐的方法
   UHUD.f <- function(data,S){
-    data<-dplyr::arrange(data,desc(D))
+    data<-arrange(data,desc(D))
     n1<-floor(1.6*S*100-0.6)
     n2<-floor(1.6*S*100-0.6)+1
     H1<-mean(data$H[1:n1], na.rm = T)
@@ -138,12 +138,12 @@ CI.nondist <- function(Data=NULL, Plot, Tag, D, SP = NULL, H = NULL, HCB = NULL,
   AddIndex.f <- function(data,S){
     if ("H" %in% colnames(data)){
       temp <- UHUD.f(data,S=S)[2]
-      data <- dplyr::mutate(data,S=S, N=nrow(data), Hdom=temp,
+      data <- mutate(data,S=S, N=nrow(data), Hdom=temp,
                             Dg=sqrt(mean(data$D^2, na.rm = T)), Dmax=max(data$D, na.rm = T),
                             BA=pi/40000*data$D^2, BAmean=mean(BA, na.rm = T), BAmax=max(BA, na.rm = T), BAsum=sum(BA, na.rm = T)/S,
                             RS=sqrt(10000*S/N)/Hdom)
     } else {
-      data <- dplyr::mutate(data,S=S, N=nrow(data),
+      data <- mutate(data,S=S, N=nrow(data),
                             Dg=sqrt(mean(data$D^2, na.rm = T)), Dmax=max(data$D, na.rm = T),
                             BA=pi/40000*data$D^2, BAmean=mean(BA, na.rm = T), BAmax=max(BA, na.rm = T), BAsum=sum(BA, na.rm = T)/S)
     }
@@ -273,14 +273,14 @@ CI.nondist <- function(Data=NULL, Plot, Tag, D, SP = NULL, H = NULL, HCB = NULL,
   N <- nlevels(factor(data$Plot))
   # 增加进度条，何潇-2022-11-28
   cat("Start calculating: \n")
-  progress.bar <- plyr::create_progress_bar("text")  #plyr包中的create_progress_bar函数创建一个进度条
+  progress.bar <- create_progress_bar("text")  #plyr包中的create_progress_bar函数创建一个进度条
   progress.bar$init(N)   #设置任务数，几个样地
 
   # 计算总竞争
   data_jieguo<-data.frame()
   data_jieguo2<-data.frame() #用于记录种内和种间竞争的结果
   for (j in 1:N) {#先循环样地后判断，周超凡2024-3-4
-    data1 <- dplyr::filter(data, Plot==levels(factor(Plot))[j]) # 所有都要计算总竞争，提取出来，减少多余代码，周超凡2024-3-4
+    data1 <- filter(data, Plot==levels(factor(Plot))[j]) # 所有都要计算总竞争，提取出来，减少多余代码，周超凡2024-3-4
     #重复标签检查, 周超凡2022-12-11
     # if(TRUE %in% duplicated(data1$Tag)) {} # 何潇修改判断语句写法,2024-4-10
     if( any(duplicated(data1$Tag)) ){
@@ -288,18 +288,18 @@ CI.nondist <- function(Data=NULL, Plot, Tag, D, SP = NULL, H = NULL, HCB = NULL,
     }
     #向量化运算
     data1 <- AddIndex.f(data1, S=S)
-    data1 <- dplyr::mutate(data1, CI3=D/Dg, CI4=D/Dmax, CI5=BA/BAmean, CI6=BA/BAmax)
+    data1 <- mutate(data1, CI3=D/Dg, CI4=D/Dmax, CI5=BA/BAmean, CI6=BA/BAmax)
     #无法向量化的采用循环
     for (i in 1:nrow(data1)){
-      data1$CI1[i]<-dplyr::select(dplyr::filter(data1,BA > BA[i]),BA) %>% sum.f()/S
-      data1$CI2[i]<-dplyr::select(dplyr::filter(data1,D != D[i]),D) %>% sum.f()/data1$D[i]
-      data1$CI7[i]<-dplyr::select(dplyr::filter(data1,D != D[i]),BA) %>% sum.f()/data1$BA[i]
+      data1$CI1[i]<-select(filter(data1,BA > BA[i]),BA) %>% sum.f()/S
+      data1$CI2[i]<-select(filter(data1,D != D[i]),D) %>% sum.f()/data1$D[i]
+      data1$CI7[i]<-select(filter(data1,D != D[i]),BA) %>% sum.f()/data1$BA[i]
       #判断是否计算CI8
       if(!is.null(data1$H)){
-        data1$CI8[i]<-dplyr::select(dplyr::filter(data1, D > D[i]), BA) %>% sum.f()/data1$BAsum[i]/data1$RS[i]
+        data1$CI8[i]<-select(filter(data1, D > D[i]), BA) %>% sum.f()/data1$BAsum[i]/data1$RS[i]
         #判断是否计算CI9
         if(!is.null(data1$HCB)&!is.null(data1$CR)){
-          data1$CI9[i]<-dplyr::select(dplyr::filter(data1, H-HCB <= 0.66*H[i]), CR) %>% area.f()/S
+          data1$CI9[i]<-select(filter(data1, H-HCB <= 0.66*H[i]), CR) %>% area.f()/S
         } else {
           data1$CI9[i]<-NA
         }
@@ -316,37 +316,37 @@ CI.nondist <- function(Data=NULL, Plot, Tag, D, SP = NULL, H = NULL, HCB = NULL,
       for (k in 1:N_sp_j) {
         # 向量化计算
         # data2 保存相同树种的数据
-        data2 <- dplyr::filter(data1, SP==levels(factor(SP))[k])
+        data2 <- filter(data1, SP==levels(factor(SP))[k])
         data2 <- AddIndex.f(data2,S=S)
         # data3 保存不同树种的数据
-        data3 <- dplyr::filter(data1, SP!=levels(factor(SP))[k])
+        data3 <- filter(data1, SP!=levels(factor(SP))[k])
         data3 <- AddIndex.f(data3,S=S)
         # 向量化计算结果
-        data2 <- dplyr::mutate(data2,
+        data2 <- mutate(data2,
                         CI3_intra=D/Dg, CI4_intra=D/Dmax, CI5_intra=BA/BAmean, CI6_intra=BA/BAmax,
                         CI3_inter=D/mean(data3$Dg), CI4_inter=D/mean(data3$Dmax), CI5_inter=BA/mean(data3$BAmean), CI6_inter=BA/mean(data3$BAmax))
         # 非向量化计算
         for (i in 1:nrow(data2)){
-          data2$CI1_intra[i]<-dplyr::select(dplyr::filter(data2, BA > BA[i]), BA) %>% sum.f()/S
-          data2$CI1_inter[i]<-dplyr::select(dplyr::filter(data3, BA > data2$BA[i]), BA) %>% sum.f()/S
-          data2$CI2_intra[i]<-dplyr::select(dplyr::filter(data2, D != D[i]), D) %>% sum.f()/data2$D[i]
-          data2$CI2_inter[i]<-dplyr::select(dplyr::filter(data3, D != data2$D[i]), D) %>% sum.f()/data2$D[i]
-          data2$CI7_intra[i]<-dplyr::select(dplyr::filter(data2, D != D[i]), BA) %>% sum.f()/data2$BA[i]
-          data2$CI7_inter[i]<-dplyr::select(dplyr::filter(data3, D != data2$D[i]), BA) %>% sum.f()/data2$BA[i]
+          data2$CI1_intra[i]<-select(filter(data2, BA > BA[i]), BA) %>% sum.f()/S
+          data2$CI1_inter[i]<-select(filter(data3, BA > data2$BA[i]), BA) %>% sum.f()/S
+          data2$CI2_intra[i]<-select(filter(data2, D != D[i]), D) %>% sum.f()/data2$D[i]
+          data2$CI2_inter[i]<-select(filter(data3, D != data2$D[i]), D) %>% sum.f()/data2$D[i]
+          data2$CI7_intra[i]<-select(filter(data2, D != D[i]), BA) %>% sum.f()/data2$BA[i]
+          data2$CI7_inter[i]<-select(filter(data3, D != data2$D[i]), BA) %>% sum.f()/data2$BA[i]
           #判断是否计算CI8_intra
           if(!is.null(data2$H)){
             # 将data2和data3中的优势高Hdom和相对空间指数RS和林分断面积转换为data1中样地尺度计算的结果
-            data2 <- data2 %>% dplyr::select(-c(N, Hdom, RS, BAsum)) %>%
-              dplyr::left_join(data1 %>% dplyr::select(Plot, Tag, N, Hdom, RS, BAsum), by=c("Plot", "Tag"))
-            data3 <- data3 %>% dplyr::select(-c(N, Hdom, RS, BAsum)) %>%
-              dplyr::left_join(data1 %>% dplyr::select(Plot, Tag, N, Hdom, RS, BAsum), by=c("Plot", "Tag"))
+            data2 <- data2 %>% select(-c(N, Hdom, RS, BAsum)) %>%
+              left_join(data1 %>% select(Plot, Tag, N, Hdom, RS, BAsum), by=c("Plot", "Tag"))
+            data3 <- data3 %>% select(-c(N, Hdom, RS, BAsum)) %>%
+              left_join(data1 %>% select(Plot, Tag, N, Hdom, RS, BAsum), by=c("Plot", "Tag"))
             # 开始计算
-            data2$CI8_intra[i]<-dplyr::select(dplyr::filter(data2, D > D[i]),BA) %>% sum.f()/data2$BAsum[i]/data2$RS[i]
-            data2$CI8_inter[i]<-dplyr::select(dplyr::filter(data3, D > data2$D[i]),BA) %>% sum.f()/data2$BAsum[i]/data2$RS[i]
+            data2$CI8_intra[i]<-select(filter(data2, D > D[i]),BA) %>% sum.f()/data2$BAsum[i]/data2$RS[i]
+            data2$CI8_inter[i]<-select(filter(data3, D > data2$D[i]),BA) %>% sum.f()/data2$BAsum[i]/data2$RS[i]
             #判断是否计算种内CI9_intra
             if(!is.null(data2$HCB)&!is.null(data2$CR)){
-              data2$CI9_intra[i]<-dplyr::select(dplyr::filter(data2, H-HCB <= 0.66*H[i]), CR) %>% area.f()/S
-              data2$CI9_inter[i]<-dplyr::select(dplyr::filter(data3, H-HCB <= 0.66*data2$H[i]), CR) %>% area.f()/S
+              data2$CI9_intra[i]<-select(filter(data2, H-HCB <= 0.66*H[i]), CR) %>% area.f()/S
+              data2$CI9_inter[i]<-select(filter(data3, H-HCB <= 0.66*data2$H[i]), CR) %>% area.f()/S
             } else {
               data2$CI9_intra[i]<-NA
               data2$CI9_inter[i]<-NA
@@ -368,18 +368,18 @@ CI.nondist <- function(Data=NULL, Plot, Tag, D, SP = NULL, H = NULL, HCB = NULL,
     progress.bar$step() #输出进度条
   }
   cat("\n")
-  data_jieguo <- dplyr::select(data_jieguo,Plot,Tag, paste("CI",1:9,sep = ""))
+  data_jieguo <- select(data_jieguo,Plot,Tag, paste("CI",1:9,sep = ""))
 
 
   # 根据输入的变量判断总竞争data_jieguo的输出结果，何潇2022-12-2
   # 判断条件错误，应该是判断data中是否存在变量名，何潇2024-3-9
   if(all(c("H") %in% names(data)) & !all(c("HCB","CR") %in% names(data))){
-    data_jieguo <- dplyr::select(data_jieguo,Plot,Tag, paste("CI",1:8,sep = ""))
+    data_jieguo <- select(data_jieguo,Plot,Tag, paste("CI",1:8,sep = ""))
   }else {#else if后有else导致出错，直接调用else，修改成重新判断，周超凡2024-3-4
     if(all(c("H", "HCB","CR") %in% names(data))){
-      data_jieguo <- dplyr::select(data_jieguo,Plot,Tag, paste("CI",1:9,sep = ""))
+      data_jieguo <- select(data_jieguo,Plot,Tag, paste("CI",1:9,sep = ""))
     }else{
-      data_jieguo <- dplyr::select(data_jieguo,Plot,Tag, paste("CI",1:7,sep = ""))
+      data_jieguo <- select(data_jieguo,Plot,Tag, paste("CI",1:7,sep = ""))
     }
   }
 
@@ -390,21 +390,21 @@ CI.nondist <- function(Data=NULL, Plot, Tag, D, SP = NULL, H = NULL, HCB = NULL,
   if(!is.null(data$SP)|(N_sp==1)){
     if(all(c("H") %in% names(data)) & !all(c("HCB","CR") %in% names(data))){
       data_jieguo2<-data_jieguo2 %>%
-        dplyr::select(Plot,Tag, paste("CI",1:8,"_intra", sep = ""), paste("CI",1:8,"_inter", sep = ""))
+        select(Plot,Tag, paste("CI",1:8,"_intra", sep = ""), paste("CI",1:8,"_inter", sep = ""))
     }else{#else if后有有else导致出错，直接调用else，修改成重新判断，周超凡2024-3-4
       if(all(c("H", "HCB","CR") %in% names(data))){
         data_jieguo2<-data_jieguo2 %>%
-          dplyr::select(Plot,Tag, paste("CI",1:9,"_intra", sep = ""), paste("CI",1:9,"_inter", sep = ""))
+          select(Plot,Tag, paste("CI",1:9,"_intra", sep = ""), paste("CI",1:9,"_inter", sep = ""))
       }else{
         data_jieguo2<-data_jieguo2 %>%
-          dplyr::select(Plot,Tag, paste("CI",1:7,"_intra", sep = ""), paste("CI",1:7,"_inter", sep = ""))
+          select(Plot,Tag, paste("CI",1:7,"_intra", sep = ""), paste("CI",1:7,"_inter", sep = ""))
       }
     }
-    data_jieguo <- data_jieguo %>% dplyr::left_join(data_jieguo2, by=c("Plot","Tag"))
+    data_jieguo <- data_jieguo %>% left_join(data_jieguo2, by=c("Plot","Tag"))
   }
   #判断是否与原数据框合并
   if(Bind&!is.null(Data)){
-    data_jieguo <- dplyr::left_join(Data, data_jieguo, by = c("Plot","Tag"))
+    data_jieguo <- left_join(Data, data_jieguo, by = c("Plot","Tag"))
   }
   return(data_jieguo)
 }
