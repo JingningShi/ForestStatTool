@@ -37,7 +37,7 @@
 
 #' @import tidyverse
 #' @importFrom dplyr filter
-#' @import stats
+
 
 #' @examples ## 加载内置数据
 #' @examples data(ForestStatTool)
