@@ -36,7 +36,7 @@
 #' @name Plot_Divide
 
 #' @import tidyverse
-#' @import dplyr
+#' @importFrom dplyr filter
 #' @import stats
 
 #' @examples ## 加载内置数据
@@ -61,11 +61,11 @@
 
 
 Plot_Divide <- function(Data, Plot, X, Y, Num_xy = NULL, Length_xy = NULL, Origin = c(0,0), Range_xy){
-  # 检测dplyr包是否存在，只有不存在时才会安装
-  if(!require ('dplyr')){
-    install.packages("dplyr")
-    library(dplyr)
-  }
+ # 检测dplyr包是否存在，只有不存在时才会安装
+ # if(!require ('dplyr')){
+ #   install.packages("dplyr")
+ #   library(dplyr)
+ # }
   # 检测tidyverse包是否存在，只有不存在时才会安装
   if(!require ('tidyverse')){
     install.packages("tidyverse")
@@ -125,14 +125,14 @@ Plot_Divide <- function(Data, Plot, X, Y, Num_xy = NULL, Length_xy = NULL, Origi
   numy0 <- NumY-1
   plotall<-data.frame()
   for (i in 1:length(plotname)) {
-    datax <- dplyr::filter(Data,subplot==plotname[i])
+    datax <- filter(Data,subplot==plotname[i])
     for(j in 0:numy0){
       Ylow <- Origin[2]+j*LengthY
       Yhigh <- Origin[2]+(j+1)*LengthY
       for (k in 0:numx0) {
         Xlow <- Origin[1]+k*LengthX
         Xhigh <- Origin[1]+(k+1)*LengthX
-        data_new <- dplyr::filter(datax, subY >= Ylow, subY < Yhigh, subX >= Xlow, subX < Xhigh)
+        data_new <- filter(datax, subY >= Ylow, subY < Yhigh, subX >= Xlow, subX < Xhigh)
         if(nrow(data_new)>0){
           k0 <- k
           j0 <- j
