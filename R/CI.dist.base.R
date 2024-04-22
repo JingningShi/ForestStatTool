@@ -65,8 +65,8 @@
 #' @export CI.dist.base
 
 #' @import deldir
-#' @import dplyr
-#' @import plyr
+#' @importFrom dplyr arrange filter left_join mutate 
+#' @importFrom plyr create_progress_bar
 #' @import stats
 
 #' @examples ## 加载内置数据
@@ -186,7 +186,7 @@ NearN.f <- function(x0, y0, datax, k=k){
   y1 <- datax$Y - y0
   datax$dist <- sqrt(x1^2 + y1^2)#分别求算各个林木到对象木的距离
   # NearN <-datax[order(datax$dist),]
-  NearN <- dplyr::arrange(datax, dist)#按照距离排序结果取自身和最近的k株相邻木的信息
+  NearN <- arrange(datax, dist)#按照距离排序结果取自身和最近的k株相邻木的信息
   NearN <- NearN[1:(k+1),]
   return(NearN)
 }
@@ -199,7 +199,7 @@ StepRad.f<-function(x0,y0,datax,Search_dist=Search_dist){
   y1<-datax$Y-y0
   datax$dist<-sqrt(x1^2+y1^2)#分别求算各个林木到对象木的距离
   NearRad<-datax[datax$dist < Search_dist,]#取自身和半径内的所有相邻木的信息
-  NearRad <- dplyr::arrange(NearRad,dist)#按照距离排序
+  NearRad <- arrange(NearRad,dist)#按照距离排序
   return(NearRad)
 }
 
@@ -251,7 +251,7 @@ Hegyi.f<-function(x0,y0,D0,sp0,competition){
       # y0 <- competition$Y[1]
       # D0<-competition$D[1]
       # sp0<-competition$SP[1]
-      competition <- dplyr::mutate(competition,X0=x0,Y0=y0,
+      competition <- mutate(competition,X0=x0,Y0=y0,
                             dist=sqrt((X-X0)^2+(Y-Y0)^2))
       Near<-competition[2:N,]
       Near_intra<-Near[Near$SP==sp0,]
@@ -299,7 +299,7 @@ Hegyi.f<-function(x0,y0,D0,sp0,competition){
       y0 <- competition$Y[1]
       D0<-competition$D[1]
 
-      competition <- dplyr::mutate(competition,X0=x0,Y0=y0,
+      competition <- mutate(competition,X0=x0,Y0=y0,
                             dist=sqrt((X-X0)^2+(Y-Y0)^2))
       Near<-competition[2:N,]
       if(nrow(Near) == 0){
@@ -488,12 +488,12 @@ Hegyi.f<-function(x0,y0,D0,sp0,competition){
   N <- nlevels(factor(data0$Plot))
   # 增加进度条，何潇-2022-11-28
   cat("Start calculating: \n")
-  progress.bar <- plyr::create_progress_bar("text")  #plyr包中的create_progress_bar函数创建一个进度条
+  progress.bar <- create_progress_bar("text")  #plyr包中的create_progress_bar函数创建一个进度条
   progress.bar$init(N)   #设置任务数，几个样地
 
   data_all <- data.frame()
   for (i in 1:N) {
-    datax <- dplyr::filter(data0,Plot==levels(factor(data0$Plot))[i])
+    datax <- filter(data0,Plot==levels(factor(data0$Plot))[i])
     #重复标签检查
     if(T %in% duplicated(datax$Tag)){
       stop("There are tags duplicated in data, please use the function 'Tag_Divide' or 'Tag_Remove' to solve, and use the new column of 'newTag' to analyse.")
@@ -564,11 +564,11 @@ Hegyi.f<-function(x0,y0,D0,sp0,competition){
   }
   cat("\n")
   if(Correct == "translation"){
-    data_all <- dplyr::filter(data_all, in_out == "in")
+    data_all <- filter(data_all, in_out == "in")
     }
   #判断是否与原数据框合并
   if(Bind){
-    data_all <- dplyr::left_join(Data, data_all, by = c("Plot","Tag"))
+    data_all <- left_join(Data, data_all, by = c("Plot","Tag"))
   }
   return(data_all)
 }
