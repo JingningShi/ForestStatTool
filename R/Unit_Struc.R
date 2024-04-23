@@ -107,7 +107,7 @@
 
 Unit_Struc <- function(Data = NULL, Plot, Tag, X, Y, D, SP, H = NULL, CR = NULL,k = 4, Shape = "rectangle",Correct = "single",
                          Origin = c(0,0), Range_xy = NULL, Radius = NULL, Buf_dist = 5,  Bind = FALSE){
-  if(!require("deldir")){
+  # if(!require("deldir")){
   #   install.packages("deldir")
   #   library(deldir)
   # }
