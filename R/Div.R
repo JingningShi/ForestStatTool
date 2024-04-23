@@ -61,7 +61,7 @@
 #' @export Div
 #' @name Div
 
-#' @import dplyr
+#' @importFrom dplyr left_join
 #' @import stats
 
 #' @examples ## 加载内置数据
@@ -202,7 +202,7 @@ Div = function(Plot, D, SP, TreeType = NULL, Dmin = 5,  dClass = NULL, Index = '
   Chao1 = Richness + (F1*(F1-1))/(2*(F2+1))
   F.data = data.frame("Plot"=rownames(as.data.frame(F.temp)), Chao1)
 
-  Species_result = dplyr::left_join(Species_result, F.data, by = 'Plot')
+  Species_result = left_join(Species_result, F.data, by = 'Plot')
 
   #-------------------------------------------------------------------------------#
   # 径阶划分，此处并不智能
@@ -238,7 +238,7 @@ Div = function(Plot, D, SP, TreeType = NULL, Dmin = 5,  dClass = NULL, Index = '
   BAdiv_dbhclass2 = speciesdiv(sum.ba.dbhclass2)
   BAdiv_dbhclass2_out = data.frame("Plot"=rownames(as.data.frame(BAdiv_dbhclass2)),as.data.frame(BAdiv_dbhclass2)[,2:4])
 
-  Size_dClass2_result = dplyr::left_join(Ndiv_dbhclass2_out, BAdiv_dbhclass2_out, by = 'Plot')
+  Size_dClass2_result = left_join(Ndiv_dbhclass2_out, BAdiv_dbhclass2_out, by = 'Plot')
   colnames(Size_dClass2_result) = c('Plot',
                                     'N_GiniSimpson_Size2_Div',	'N_Simpson_Size2_Div',	'N_Shannon_Size2_Div',
                                     'BA_GiniSimpson_Size2_Div', 'BA_Simpson_Size2_Div',	'BA_Shannon_Size2_Div')
@@ -254,7 +254,7 @@ Div = function(Plot, D, SP, TreeType = NULL, Dmin = 5,  dClass = NULL, Index = '
   BAdiv_dbhclass4 = speciesdiv(sum.ba.dbhclass4)
   BAdiv_dbhclass4_out = data.frame("Plot"=rownames(as.data.frame(BAdiv_dbhclass4)),as.data.frame(BAdiv_dbhclass4)[,2:4])
 
-  Size_dClass4_result = dplyr::left_join(Ndiv_dbhclass4_out, BAdiv_dbhclass4_out, by = 'Plot')
+  Size_dClass4_result = left_join(Ndiv_dbhclass4_out, BAdiv_dbhclass4_out, by = 'Plot')
   colnames(Size_dClass4_result) = c('Plot',
                                     'N_GiniSimpson_Size4_Div',	'N_Simpson_Size4_Div',	'N_Shannon_Size4_Div',
                                     'BA_GiniSimpson_Size4_Div', 'BA_Simpson_Size4_Div',	'BA_Shannon_Size4_Div')
@@ -280,7 +280,7 @@ Div = function(Plot, D, SP, TreeType = NULL, Dmin = 5,  dClass = NULL, Index = '
   BAdiv_SP_dbhclass2 = speciesdiv(sum.ba.sp.dbhclass2)
   BAdiv_SP_dbhclass2_out = data.frame("Plot"=rownames(as.data.frame(BAdiv_SP_dbhclass2)),as.data.frame(BAdiv_SP_dbhclass2)[,2:4])
 
-  SS_dClass2_result = dplyr::left_join(Ndiv_sp_dbhclass2_out, BAdiv_SP_dbhclass2_out, by = 'Plot')
+  SS_dClass2_result = left_join(Ndiv_sp_dbhclass2_out, BAdiv_SP_dbhclass2_out, by = 'Plot')
   colnames(SS_dClass2_result) = c('Plot',
                                   'N_GiniSimpson_SS2_Div',	'N_Simpson_SS2_Div',	'N_Shannon_SS2_Div',
                                   'BA_GiniSimpson_SS2_Div', 'BA_Simpson_SS2_Div',	'BA_Shannon_SS2_Div')
@@ -296,7 +296,7 @@ Div = function(Plot, D, SP, TreeType = NULL, Dmin = 5,  dClass = NULL, Index = '
   BAdiv_SP_dbhclass4 = speciesdiv(sum.ba.sp.dbhclass4)
   BAdiv_SP_dbhclass4_out = data.frame("Plot"=rownames(as.data.frame(BAdiv_SP_dbhclass4)),as.data.frame(BAdiv_SP_dbhclass4)[,2:4])
 
-  SS_dClass4_result = dplyr::left_join(Ndiv_sp_dbhclass4_out, BAdiv_SP_dbhclass4_out, by = 'Plot')
+  SS_dClass4_result = left_join(Ndiv_sp_dbhclass4_out, BAdiv_SP_dbhclass4_out, by = 'Plot')
   colnames(SS_dClass4_result) = c('Plot',
                                   'N_GiniSimpson_SS4_Div',	'N_Simpson_SS4_Div',	'N_Shannon_SS4_Div',
                                   'BA_GiniSimpson_SS4_Div', 'BA_Simpson_SS4_Div',	'BA_Shannon_SS4_Div')
@@ -317,7 +317,7 @@ Div = function(Plot, D, SP, TreeType = NULL, Dmin = 5,  dClass = NULL, Index = '
       }
     }
     else{
-      Size_result = dplyr::left_join(Size_dClass2_result, Size_dClass4_result, by = 'Plot')
+      Size_result = left_join(Size_dClass2_result, Size_dClass4_result, by = 'Plot')
     }
     return(Size_result)
   }
@@ -331,25 +331,25 @@ Div = function(Plot, D, SP, TreeType = NULL, Dmin = 5,  dClass = NULL, Index = '
       }
     }
     else{
-      SS_result = dplyr::left_join(SS_dClass2_result, SS_dClass4_result, by = 'Plot')
+      SS_result = left_join(SS_dClass2_result, SS_dClass4_result, by = 'Plot')
     }
     return(SS_result)
   }
   else if(Index=='ALL_2'){
-    result2 = dplyr::left_join(Species_result, Size_dClass2_result, by = 'Plot')
-    result2 = dplyr::left_join(result2, SS_dClass2_result, by = 'Plot')
+    result2 = left_join(Species_result, Size_dClass2_result, by = 'Plot')
+    result2 = left_join(result2, SS_dClass2_result, by = 'Plot')
     return(result2)
   }
   else if(Index=='ALL_4'){
-    result4 = dplyr::left_join(Species_result, Size_dClass4_result, by = 'Plot')
-    result4 = dplyr::left_join(result4, SS_dClass4_result, by = 'Plot')
+    result4 = left_join(Species_result, Size_dClass4_result, by = 'Plot')
+    result4 = left_join(result4, SS_dClass4_result, by = 'Plot')
     return(result4)
   }
   else if(Index=='ALL'){
-    Size_result = dplyr::left_join(Size_dClass2_result, Size_dClass4_result, by = 'Plot')
-    SS_result = dplyr::left_join(SS_dClass2_result, SS_dClass4_result, by = 'Plot')
-    result = dplyr::left_join(Species_result, Size_result, by = 'Plot')
-    result = dplyr::left_join(result, SS_result, by = 'Plot')
+    Size_result = left_join(Size_dClass2_result, Size_dClass4_result, by = 'Plot')
+    SS_result = left_join(SS_dClass2_result, SS_dClass4_result, by = 'Plot')
+    result = left_join(Species_result, Size_result, by = 'Plot')
+    result = left_join(result, SS_result, by = 'Plot')
     return(result)
   }
 }

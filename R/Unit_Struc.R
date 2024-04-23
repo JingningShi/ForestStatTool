@@ -72,9 +72,9 @@
 #' @export Unit_Struc
 #' @name Unit_Struc
 
-#' @import deldir
-#' @import dplyr
-#' @import plyr
+#' @importFrom deldir duplicatedxy
+#' @importFrom dplyr arrange filter left_join mutate select
+#' @importFrom plyr create_progress_bar progress_text
 #' @import stats
 
 #' @examples ## 加载内置数据
@@ -322,7 +322,7 @@ Unit_Struc <- function(Data = NULL, Plot, Tag, X, Y, D, SP, H = NULL, CR = NULL,
     ##组合为大样地
     bigplot <- rbind(a1,a2,a3,a4,a5,a6,a7,a8,a9)
     #判断是否有重复点
-    dupxy <- deldir::duplicatedxy(bigplot$X,bigplot$Y)
+    dupxy <- duplicatedxy(bigplot$X,bigplot$Y)
     if(T %in% dupxy){
       bigplot$dupxy <- dupxy
       bigplot <- subset(bigplot,dupxy=="FALSE")
@@ -364,15 +364,15 @@ Unit_Struc <- function(Data = NULL, Plot, Tag, X, Y, D, SP, H = NULL, CR = NULL,
     }
     if("H"%in%colnames(Data)){
       if("CR"%in%colnames(Data)){
-        data0 <- dplyr::select(Data, Plot, Tag, X, Y, D, SP, H, CR)
+        data0 <- select(Data, Plot, Tag, X, Y, D, SP, H, CR)
       }else{
-        data0 <- dplyr::select(Data, Plot, Tag, X, Y, D, SP, H)
+        data0 <- select(Data, Plot, Tag, X, Y, D, SP, H)
       }
     }else{
       if("CR"%in%colnames(Data)){
-        data0 <- dplyr::select(Data, Plot, Tag, X, Y, D, SP, CR)
+        data0 <- select(Data, Plot, Tag, X, Y, D, SP, CR)
       }else{
-        data0 <- dplyr::select(Data, Plot, Tag, X, Y, D, SP)
+        data0 <- select(Data, Plot, Tag, X, Y, D, SP)
       }
     }
   }
@@ -439,12 +439,12 @@ Unit_Struc <- function(Data = NULL, Plot, Tag, X, Y, D, SP, H = NULL, CR = NULL,
   N <- nlevels(factor(data0$Plot))
   # 增加进度条，何潇-2022-11-28
   cat("Start calculating: \n")
-  progress.bar <- plyr::create_progress_bar("text")  #plyr包中的create_progress_bar函数创建一个进度条
+  progress.bar <- create_progress_bar("text")  #plyr包中的create_progress_bar函数创建一个进度条
   progress.bar$init(N)   #设置任务数，几个样地
 
   data_all <- data.frame()
   for (i in 1:N) {
-    datax <- dplyr::filter(data0,Plot==levels(factor(data0$Plot))[i])
+    datax <- filter(data0,Plot==levels(factor(data0$Plot))[i])
 
     #重复标签检查
     # if(TRUE %in% duplicated(datax$Tag)) {} # 何潇修改判断语句写法,2024-4-10
@@ -452,8 +452,8 @@ Unit_Struc <- function(Data = NULL, Plot, Tag, X, Y, D, SP, H = NULL, CR = NULL,
       stop("There are tags duplicated in data, please use the function 'Tag_Divide' or 'Tag_Remove' to solve, and use the new column of 'newTag' to analyse.")
     }
     #重复坐标点检查
-    # if(T %in% deldir::duplicatedxy(datax$X,datax$Y)){} # 何潇修改判断语句写法,2024-4-10
-    if( any(deldir::duplicatedxy(datax$X, datax$Y)) ){
+    # if(T %in% duplicatedxy(datax$X,datax$Y)){} # 何潇修改判断语句写法,2024-4-10
+    if( any(duplicatedxy(datax$X, datax$Y)) ){
       stop("There are coordinates duplicated in data, please use the function 'Coord_Move' or 'Coord_Remove' to solve, and use the new columns of 'newX' and 'newY' to analyse.")
     }
     #检查参数k
@@ -570,17 +570,17 @@ Unit_Struc <- function(Data = NULL, Plot, Tag, X, Y, D, SP, H = NULL, CR = NULL,
 
   # 选择边缘矫正的方式
   if(Correct == "translation"){
-    data_all <- dplyr::filter(data_all,in_out=="in")
+    data_all <- filter(data_all,in_out=="in")
   }
   if(Correct == "buffer"){
     cat(paste0("The buffer distance is ",Buf_dist,"m.\n"))
   }
-  tree_in <- dplyr::filter(data_all,in_out=="in")
+  tree_in <- filter(data_all,in_out=="in")
 
   #计算均值
   stand_value <- data.frame()
   for (i in 1:N) {
-    plotx <- dplyr::filter(tree_in,Plot==levels(factor(data0$Plot))[i])
+    plotx <- filter(tree_in,Plot==levels(factor(data0$Plot))[i])
     plotx <- plotx[,!colnames(plotx)%in%c("Plot","Tag","in_out")]
     mean0 <- colMeans(plotx)
     mean0 <- data.frame(t(mean0))
@@ -591,7 +591,7 @@ Unit_Struc <- function(Data = NULL, Plot, Tag, X, Y, D, SP, H = NULL, CR = NULL,
 
   #判断是否与原数据框合并
   if(Bind){
-    data_all <- dplyr::left_join(Data, data_all, by = c("Plot","Tag"))
+    data_all <- left_join(Data, data_all, by = c("Plot","Tag"))
   }
 
   output <- list("tree_value" = data_all, "stand_value" = stand_value)

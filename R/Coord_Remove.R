@@ -28,8 +28,8 @@
 #' @export Coord_Remove
 #' @name Coord_Remove
 
-#' @import deldir
-#' @import dplyr
+#' @importFrom deldir duplicatedxy
+#' @importFrom dplyr arrange
 
 #' @examples ## 加载内置数据
 #' @examples data(ForestStatTool)
@@ -82,7 +82,7 @@ Coord_Remove <- function(Data, Plot, X, Y, D){
   for (i in 1:length(plotname)) {
     plotx <- subset(Data,Plot==plotname[i])
     plotx <- plotx[order(plotx$DD,decreasing = T),]
-    dupxy <- deldir::duplicatedxy(plotx$newX,plotx$newY)
+    dupxy <- duplicatedxy(plotx$newX,plotx$newY)
     #重复坐标点检查
     # 何潇修改判断条件写法，2024-4-10
     if( any(dupxy) ){
@@ -102,7 +102,7 @@ Coord_Remove <- function(Data, Plot, X, Y, D){
   }else{
     cat("Duplicated coordinates found and have been removed.\n")
     plotall <- plotall[,!colnames(plotall)%in%c("newX","newY","DD","dupxy")]
-    plotall <- dplyr::arrange(plotall,Tag)
+    plotall <- arrange(plotall,Tag)
     return(plotall)
   }
 }

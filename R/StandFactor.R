@@ -64,8 +64,8 @@
 #' @export StandFactor
 #' @name StandFactor
 
-#' @import dplyr
-#' @import tidyr
+#' @importFrom dplyr group_by slice_max left_join mutate filter select arrange
+#' @importFrom tidyr pivot_longer
 #' @import stats
 
 #' @examples ## 加载内置数据
@@ -139,7 +139,7 @@ StandFactor <- function(D, Dmin = 5, Plot, S, TreeType = NULL, TreeClass = NULL,
   }
   # 树种组成计算函数
   CompositionStat <- function(zhanbi, start = 6) {
-    zhanbi_long <- tidyr::pivot_longer(zhanbi,
+    zhanbi_long <- pivot_longer(zhanbi,
       cols = colnames(zhanbi[, -1]),
       names_to = "key",
       values_to = "ratio"
@@ -293,11 +293,11 @@ StandFactor <- function(D, Dmin = 5, Plot, S, TreeType = NULL, TreeClass = NULL,
 
   # 优势胸径，2022-1-12
   data.dominantDg <- data.Alive %>%
-    dplyr::group_by(Plot) %>%
-    dplyr::slice_max(n = round(S * 100, 0), order_by = d, with_ties = F)
+    group_by(Plot) %>%
+    slice_max(n = round(S * 100, 0), order_by = d, with_ties = F)
   dominantDg <- tapply(data.dominantDg$d, INDEX = data.dominantDg$Plot, FUN = Dg)
   dominantDg <- data.frame("Plot" = rownames(dominantDg), "Dgd" = dominantDg)
-  Alive.StandFactor3 <- dplyr::left_join(Alive.StandFactor3, dominantDg, by = "Plot")
+  Alive.StandFactor3 <- left_join(Alive.StandFactor3, dominantDg, by = "Plot")
 
   # 树种组成，只有输入的 SP 不止一个树种时才计算，2021-10-16
   if (length(unique(data.Alive$SP)) != 1) {
@@ -325,7 +325,7 @@ StandFactor <- function(D, Dmin = 5, Plot, S, TreeType = NULL, TreeClass = NULL,
     ba.zhanbi <- data.frame("Plot" = rownames(as.data.frame(ba.sum)), ba.zhanbi)
     # 断面积树种组成式
     ba.Composition <- CompositionStat(ba.zhanbi)
-    ba.zhanbi <- dplyr::left_join(ba.zhanbi, ba.Composition, by = "Plot")
+    ba.zhanbi <- left_join(ba.zhanbi, ba.Composition, by = "Plot")
 
     # 株数比例----单独作为一个文件比较好，方便数据合并
     counts.sp <- tapply(data.Alive$d, INDEX = list(data.Alive$Plot, data.Alive$SP), FUN = length)
@@ -351,7 +351,7 @@ StandFactor <- function(D, Dmin = 5, Plot, S, TreeType = NULL, TreeClass = NULL,
     n.zhanbi <- data.frame("Plot" = rownames(as.data.frame(counts.sp)), n.zhanbi)
     # 株数树种组成式
     n.Composition <- CompositionStat(n.zhanbi, start = 5)
-    n.zhanbi <- dplyr::left_join(n.zhanbi, n.Composition, by = "Plot")
+    n.zhanbi <- left_join(n.zhanbi, n.Composition, by = "Plot")
   }
 
   # 分树种计算林分因子
@@ -402,7 +402,7 @@ StandFactor <- function(D, Dmin = 5, Plot, S, TreeType = NULL, TreeClass = NULL,
       colnames(Alive.SP.V) <- Alive.SP.V.names
       Alive.SP.V <- data.frame("Plot" = rownames(Alive.SP.V), Alive.SP.V)
       # 拼接
-      Alive.SP <- dplyr::left_join(Alive.SP, Alive.SP.V, by = "Plot")
+      Alive.SP <- left_join(Alive.SP, Alive.SP.V, by = "Plot")
     }
     # 分树种的生物量 2021-10-17
     if (!is.null(Biomass)) {
@@ -423,7 +423,7 @@ StandFactor <- function(D, Dmin = 5, Plot, S, TreeType = NULL, TreeClass = NULL,
           colnames(SP.StandBio_i) <- paste0("Bio_", i, "_", SP.StandBio_i.names)
           SP.StandBio_1 <- cbind(SP.StandBio_1, SP.StandBio_i)
         }
-        Alive.SP <- dplyr::left_join(Alive.SP, SP.StandBio_1, by = "Plot")
+        Alive.SP <- left_join(Alive.SP, SP.StandBio_1, by = "Plot")
       } else {
         SP.StandBio_1 <- tapply(data.SP.Bio[, 4 + 1] / 1000 / S, INDEX = list(data.SP.Bio$Plot, data.SP.Bio$SP), FUN = sum)
         SP.StandBio_1[is.na(SP.StandBio_1)] <- 0
@@ -431,7 +431,7 @@ StandFactor <- function(D, Dmin = 5, Plot, S, TreeType = NULL, TreeClass = NULL,
         SP.StandBio_1.names <- paste0("Bio_", SP.StandBio_1.names)
         colnames(SP.StandBio_1) <- SP.StandBio_1.names
         SP.StandBio_1 <- data.frame("Plot" = rownames(SP.StandBio_1), SP.StandBio_1)
-        Alive.SP <- dplyr::left_join(Alive.SP, SP.StandBio_1, by = "Plot")
+        Alive.SP <- left_join(Alive.SP, SP.StandBio_1, by = "Plot")
       }
     }
     # 分树种的碳储量 2021-10-17
@@ -453,7 +453,7 @@ StandFactor <- function(D, Dmin = 5, Plot, S, TreeType = NULL, TreeClass = NULL,
           colnames(SP.StandCar_i) <- paste0("Car_", i, "_", SP.StandCar_i.names)
           SP.StandCar_1 <- cbind(SP.StandCar_1, SP.StandCar_i)
         }
-        Alive.SP <- dplyr::left_join(Alive.SP, SP.StandCar_1, by = "Plot")
+        Alive.SP <- left_join(Alive.SP, SP.StandCar_1, by = "Plot")
       } else {
         SP.StandCar_1 <- tapply(data.SP.Car[, 4 + 1] / 1000 / S, INDEX = list(data.SP.Car$Plot, data.SP.Car$SP), FUN = sum)
         SP.StandCar_1[is.na(SP.StandCar_1)] <- 0
@@ -461,7 +461,7 @@ StandFactor <- function(D, Dmin = 5, Plot, S, TreeType = NULL, TreeClass = NULL,
         SP.StandCar_1.names <- paste0("Car_", SP.StandCar_1.names)
         colnames(SP.StandCar_1) <- SP.StandCar_1.names
         SP.StandCar_1 <- data.frame("Plot" = rownames(SP.StandCar_1), SP.StandCar_1)
-        Alive.SP <- dplyr::left_join(Alive.SP, SP.StandCar_1, by = "Plot")
+        Alive.SP <- left_join(Alive.SP, SP.StandCar_1, by = "Plot")
       }
     }
   }
@@ -476,7 +476,7 @@ StandFactor <- function(D, Dmin = 5, Plot, S, TreeType = NULL, TreeClass = NULL,
     AverageH[is.na(AverageH)] <- 0
     AverageH <- round(AverageH, 1)
     AverageH <- data.frame("Plot" = rownames(AverageH), "Hmean" = AverageH)
-    Alive.StandFactor3 <- dplyr::left_join(Alive.StandFactor3, AverageH, by = "Plot")
+    Alive.StandFactor3 <- left_join(Alive.StandFactor3, AverageH, by = "Plot")
 
     # 样地按径阶加权平均高
     # data.Alive.h$dClass = cut(data.Alive.h$d, breaks = c(2*(4:27)-3,300), labels = c(2*(4:26)-2, '>51'), right = F)
@@ -499,7 +499,7 @@ StandFactor <- function(D, Dmin = 5, Plot, S, TreeType = NULL, TreeClass = NULL,
       y[is.na(y)] <- 0
       Hmean_w_SP <- round(rowSums(x * y), 1)
       Hmean_w_SP <- data.frame("Plot" = names(Hmean_w_SP), "Hmean_w_SP" = Hmean_w_SP)
-      Alive.StandFactor3 <- dplyr::left_join(Alive.StandFactor3, Hmean_w_SP, by = "Plot")
+      Alive.StandFactor3 <- left_join(Alive.StandFactor3, Hmean_w_SP, by = "Plot")
     }
 
     # 样地优势高
@@ -512,12 +512,12 @@ StandFactor <- function(D, Dmin = 5, Plot, S, TreeType = NULL, TreeClass = NULL,
     h_length <- tapply(data.Alive.h3$h, INDEX = data.Alive.h3$Plot, FUN = length)
     h_length <- data.frame("Plot" = rownames(as.data.frame(h_length)), h_length)
 
-    temp_length <- dplyr::left_join(d_length, h_length, by = "Plot")
+    temp_length <- left_join(d_length, h_length, by = "Plot")
     # 筛选出d和h具有相同行数的样地，计算优势高
     Plot_h <- temp_length %>%
-      dplyr::mutate(cc = d_length - h_length ) %>%
-      dplyr::filter(cc == 0) %>%
-      dplyr::select(Plot)
+      mutate(cc = d_length - h_length ) %>%
+      filter(cc == 0) %>%
+      select(Plot)
 
     if (nrow(Plot_h)!=0) {
       # 样地内最高的6株树的平均值， Ht
@@ -527,34 +527,34 @@ StandFactor <- function(D, Dmin = 5, Plot, S, TreeType = NULL, TreeClass = NULL,
       # 混交林是否考虑树种--待商议
       Plot_h <- as.data.frame(Plot_h)
       colnames(Plot_h) <- "Plot"
-      data.Alive.htStat <- dplyr::left_join(as.data.frame(Plot_h), data.h, by = "Plot")
+      data.Alive.htStat <- left_join(as.data.frame(Plot_h), data.h, by = "Plot")
 
       h_TreeCounts <- round(S * 100, 0) # 根据样地面积确定的计算的株数
 
       # 样地内最高的 h_TreeCounts 株树的平均值
       # data.Alive.h1 = arrange(data.Alive.h1, Plot, h)
       data.Alive.ht <- data.Alive.htStat %>%
-        dplyr::group_by(Plot) %>%
-        dplyr::slice_max(n = h_TreeCounts, order_by = h, with_ties = F)
+        group_by(Plot) %>%
+        slice_max(n = h_TreeCounts, order_by = h, with_ties = F)
       dominantHt.Counts <- tapply(data.Alive.ht$h, INDEX = data.Alive.ht$Plot, FUN = length)
       dominantHt <- tapply(data.Alive.ht$h, INDEX = data.Alive.ht$Plot, FUN = mean)
       dominantHt[is.na(dominantHt)] <- 0
       dominantHt <- round(dominantHt, 1)
       dominantHt <- data.frame("Plot" = rownames(dominantHt), "Ht" = dominantHt, "Ht_Counts" = dominantHt.Counts)
-      Alive.StandFactor3 <- dplyr::left_join(Alive.StandFactor3, dominantHt, by = "Plot")
+      Alive.StandFactor3 <- left_join(Alive.StandFactor3, dominantHt, by = "Plot")
 
       # 样地内胸径最粗 h_TreeCounts 株树的平均值
       # data.Alive.h2 = arrange(data.Alive.h1, Plot, d)
       data.Alive.hd <- data.Alive.htStat %>%
-        dplyr::group_by(Plot) %>%
-        dplyr::arrange(desc(d), desc(h)) %>%
-        dplyr::slice_max(n = h_TreeCounts, order_by = d, with_ties = F)
+        group_by(Plot) %>%
+        arrange(desc(d), desc(h)) %>%
+        slice_max(n = h_TreeCounts, order_by = d, with_ties = F)
       dominantHd.Counts <- tapply(data.Alive.hd$h, INDEX = data.Alive.hd$Plot, FUN = length)
       dominantHd <- tapply(data.Alive.hd$h, INDEX = data.Alive.hd$Plot, FUN = mean)
       dominantHd[is.na(dominantHd)] <- 0
       dominantHd <- round(dominantHd, 1)
       dominantHd <- data.frame("Plot" = rownames(dominantHd), "Hd" = dominantHd, "Hd_Counts" = dominantHd.Counts)
-      Alive.StandFactor3 <- dplyr::left_join(Alive.StandFactor3, dominantHd, by = "Plot")
+      Alive.StandFactor3 <- left_join(Alive.StandFactor3, dominantHd, by = "Plot")
     } else {
       cat("The dominant height (Ht and Hd) will not be calculated, because not every tree has tree height.\n")
     }
@@ -570,7 +570,7 @@ StandFactor <- function(D, Dmin = 5, Plot, S, TreeType = NULL, TreeClass = NULL,
     data.Alive.V <- subset(data, data$d >= Dmin & !data$TreeType %in% c(13, 14, 15, 50))
     Alive.StandV <- tapply(data.Alive.V$V / S, INDEX = data.Alive.V$Plot, FUN = sum)
     Alive.StandV <- data.frame("Plot" = rownames(Alive.StandV), "V" = Alive.StandV)
-    Alive.StandFactor3 <- dplyr::left_join(Alive.StandFactor3, Alive.StandV, by = "Plot")
+    Alive.StandFactor3 <- left_join(Alive.StandFactor3, Alive.StandV, by = "Plot")
 
     if (length(unique(SP)) != 1) {
       # 蓄积比例----单独作为一个文件比较好，方便数据合并
@@ -596,7 +596,7 @@ StandFactor <- function(D, Dmin = 5, Plot, S, TreeType = NULL, TreeClass = NULL,
       V.zhanbi <- data.frame("Plot" = rownames(as.data.frame(V.sum)), V.zhanbi)
       # 蓄积树种组成式
       V.Composition <- CompositionStat(V.zhanbi, start = 5)
-      V.zhanbi <- dplyr::left_join(V.zhanbi, V.Composition, by = "Plot")
+      V.zhanbi <- left_join(V.zhanbi, V.Composition, by = "Plot")
     }
   }
   ##
@@ -615,11 +615,11 @@ StandFactor <- function(D, Dmin = 5, Plot, S, TreeType = NULL, TreeClass = NULL,
         colnames(Alive.StandBio_i) <- paste0("Bio_", i)
         Alive.StandBio_1 <- cbind(Alive.StandBio_1, Alive.StandBio_i)
       }
-      Alive.StandFactor3 <- dplyr::left_join(Alive.StandFactor3, Alive.StandBio_1, by = "Plot")
+      Alive.StandFactor3 <- left_join(Alive.StandFactor3, Alive.StandBio_1, by = "Plot")
     } else {
       Alive.StandBio_1 <- tapply(data.Alive.Bio[, 4 + 1] / 1000 / S, INDEX = data.Alive.Bio$Plot, FUN = sum)
       Alive.StandBio_1 <- data.frame("Plot" = rownames(Alive.StandBio_1), "Bio" = Alive.StandBio_1)
-      Alive.StandFactor3 <- dplyr::left_join(Alive.StandFactor3, Alive.StandBio_1, by = "Plot")
+      Alive.StandFactor3 <- left_join(Alive.StandFactor3, Alive.StandBio_1, by = "Plot")
     }
   }
   ##
@@ -638,11 +638,11 @@ StandFactor <- function(D, Dmin = 5, Plot, S, TreeType = NULL, TreeClass = NULL,
         colnames(Alive.StandCar_i) <- paste0("Car_", i)
         Alive.StandCar_1 <- cbind(Alive.StandCar_1, Alive.StandCar_i)
       }
-      Alive.StandFactor3 <- dplyr::left_join(Alive.StandFactor3, Alive.StandCar_1, by = "Plot")
+      Alive.StandFactor3 <- left_join(Alive.StandFactor3, Alive.StandCar_1, by = "Plot")
     } else {
       Alive.StandCar_1 <- tapply(data.Alive.Car[, 4 + 1] / 1000 / S, INDEX = data.Alive.Car$Plot, FUN = sum)
       Alive.StandCar_1 <- data.frame("Plot" = rownames(Alive.StandCar_1), "Car" = Alive.StandCar_1)
-      Alive.StandFactor3 <- dplyr::left_join(Alive.StandFactor3, Alive.StandCar_1, by = "Plot")
+      Alive.StandFactor3 <- left_join(Alive.StandFactor3, Alive.StandCar_1, by = "Plot")
     }
   }
 
@@ -660,7 +660,7 @@ StandFactor <- function(D, Dmin = 5, Plot, S, TreeType = NULL, TreeClass = NULL,
       colnames(Cut.StandFactor2) <- c("Cut_Dg", "Cut_Ba", "Cut_N", "Cut_SDI", "Cut_aSDI")
       Cut.StandFactor3 <- data.frame("Plot" = rownames(Cut.StandFactor), Cut.StandFactor2)
       # 拼接
-      Alive.StandFactor3 <- dplyr::left_join(Alive.StandFactor3, Cut.StandFactor3, by = "Plot")
+      Alive.StandFactor3 <- left_join(Alive.StandFactor3, Cut.StandFactor3, by = "Plot")
       # 统计Cut_木的蓄积  # 2021-10-16， 补充计算采伐木的蓄积
       if (!is.null(V)) {
         data <- data.frame("Plot" = Plot, "TreeType" = TT, "d" = D, "ba" = ba, "V" = V)
@@ -668,7 +668,7 @@ StandFactor <- function(D, Dmin = 5, Plot, S, TreeType = NULL, TreeClass = NULL,
         Cut.StandV <- tapply(data.Cut.V$V / S, INDEX = data.Cut.V$Plot, FUN = sum)
         Cut.StandV <- data.frame("Plot" = rownames(Cut.StandV), "Cut_V" = Cut.StandV)
         # 拼接
-        Alive.StandFactor3 <- dplyr::left_join(Alive.StandFactor3, Cut.StandV, by = "Plot")
+        Alive.StandFactor3 <- left_join(Alive.StandFactor3, Cut.StandV, by = "Plot")
       }
       # 统计Cut_木的生物量 # 2021-10-17， 补充计算采伐木的生物量
       if (!is.null(Biomass)) {
@@ -685,11 +685,11 @@ StandFactor <- function(D, Dmin = 5, Plot, S, TreeType = NULL, TreeClass = NULL,
               colnames(Cut.StandBio_i) <- paste0("Cut_Bio_", i)
               Cut.StandBio_1 <- cbind(Cut.StandBio_1, Cut.StandBio_i)
             }
-            Alive.StandFactor3 <- dplyr::left_join(Alive.StandFactor3, Cut.StandBio_1, by = "Plot")
+            Alive.StandFactor3 <- left_join(Alive.StandFactor3, Cut.StandBio_1, by = "Plot")
           } else {
             Cut.StandBio_1 <- tapply(data.Cut.Bio[, 4 + 1] / 1000 / S, INDEX = data.Cut.Bio$Plot, FUN = sum)
             Cut.StandBio_1 <- data.frame("Plot" = rownames(Cut.StandBio_1), "Cut_Bio" = Cut.StandBio_1)
-            Alive.StandFactor3 <- dplyr::left_join(Alive.StandFactor3, Cut.StandBio_1, by = "Plot")
+            Alive.StandFactor3 <- left_join(Alive.StandFactor3, Cut.StandBio_1, by = "Plot")
           }
          }
         }
@@ -710,11 +710,11 @@ StandFactor <- function(D, Dmin = 5, Plot, S, TreeType = NULL, TreeClass = NULL,
               colnames(Cut.StandCar_i) <- paste0("Cut_Car_", i)
               Cut.StandCar_1 <- cbind(Cut.StandCar_1, Cut.StandCar_i)
             }
-            Alive.StandFactor3 <- dplyr::left_join(Alive.StandFactor3, Cut.StandCar_1, by = "Plot")
+            Alive.StandFactor3 <- left_join(Alive.StandFactor3, Cut.StandCar_1, by = "Plot")
           } else {
             Cut.StandCar_1 <- tapply(data.Cut.Car[, 4 + 1] / 1000 / S, INDEX = data.Cut.Car$Plot, FUN = sum)
             Cut.StandCar_1 <- data.frame("Plot" = rownames(Cut.StandCar_1), "Cut_Car" = Cut.StandCar_1)
-            Alive.StandFactor3 <- dplyr::left_join(Alive.StandFactor3, Cut.StandCar_1, by = "Plot")
+            Alive.StandFactor3 <- left_join(Alive.StandFactor3, Cut.StandCar_1, by = "Plot")
           }
         }
       }
@@ -732,7 +732,7 @@ StandFactor <- function(D, Dmin = 5, Plot, S, TreeType = NULL, TreeClass = NULL,
       colnames(Dead.StandFactor2) <- c("Dead_Dg", "Dead_Ba", "Dead_N", "Dead_SDI", "Dead_aSDI")
       Dead.StandFactor3 <- data.frame("Plot" = rownames(Dead.StandFactor), Dead.StandFactor2)
       # 拼接
-      Alive.StandFactor3 <- dplyr::left_join(Alive.StandFactor3, Dead.StandFactor3, by = "Plot")
+      Alive.StandFactor3 <- left_join(Alive.StandFactor3, Dead.StandFactor3, by = "Plot")
       # 统计Dead_木的蓄积   # 2021-10-16， 补充计算枯死木的蓄积
       if (!is.null(V)) {
         V <- as.numeric(V)
@@ -741,7 +741,7 @@ StandFactor <- function(D, Dmin = 5, Plot, S, TreeType = NULL, TreeClass = NULL,
         Dead.StandV <- tapply(data.Dead.V$V / S, INDEX = data.Dead.V$Plot, FUN = sum)
         Dead.StandV <- data.frame("Plot" = rownames(Dead.StandV), "Dead_V" = Dead.StandV)
         # 拼接
-        Alive.StandFactor3 <- dplyr::left_join(Alive.StandFactor3, Dead.StandV, by = "Plot")
+        Alive.StandFactor3 <- left_join(Alive.StandFactor3, Dead.StandV, by = "Plot")
       }
       # 统计Dead_木的生物量 # 2021-10-17， 补充计算枯死木的生物量
       if (!is.null(Biomass)) {
@@ -758,11 +758,11 @@ StandFactor <- function(D, Dmin = 5, Plot, S, TreeType = NULL, TreeClass = NULL,
               colnames(Dead.StandBio_i) <- paste0("Dead_Bio_", i)
               Dead.StandBio_1 <- cbind(Dead.StandBio_1, Dead.StandBio_i)
             }
-            Alive.StandFactor3 <- dplyr::left_join(Alive.StandFactor3, Dead.StandBio_1, by = "Plot")
+            Alive.StandFactor3 <- left_join(Alive.StandFactor3, Dead.StandBio_1, by = "Plot")
           } else {
             Dead.StandBio_1 <- tapply(data.Dead.Bio[, 4 + 1] / 1000 / S, INDEX = data.Dead.Bio$Plot, FUN = sum)
             Dead.StandBio_1 <- data.frame("Plot" = rownames(Dead.StandBio_1), "Dead_Bio" = Dead.StandBio_1)
-            Alive.StandFactor3 <- dplyr::left_join(Alive.StandFactor3, Dead.StandBio_1, by = "Plot")
+            Alive.StandFactor3 <- left_join(Alive.StandFactor3, Dead.StandBio_1, by = "Plot")
           }
         }
       }
@@ -781,11 +781,11 @@ StandFactor <- function(D, Dmin = 5, Plot, S, TreeType = NULL, TreeClass = NULL,
               colnames(Dead.StandCar_i) <- paste0("Dead_Car_", i)
               Dead.StandCar_1 <- cbind(Dead.StandCar_1, Dead.StandCar_i)
             }
-            Alive.StandFactor3 <- dplyr::left_join(Alive.StandFactor3, Dead.StandCar_1, by = "Plot")
+            Alive.StandFactor3 <- left_join(Alive.StandFactor3, Dead.StandCar_1, by = "Plot")
           } else {
             Dead.StandCar_1 <- tapply(data.Dead.Car[, 4 + 1] / 1000 / S, INDEX = data.Dead.Car$Plot, FUN = sum)
             Dead.StandCar_1 <- data.frame("Plot" = rownames(Dead.StandCar_1), "Dead_Car" = Dead.StandCar_1)
-            Alive.StandFactor3 <- dplyr::left_join(Alive.StandFactor3, Dead.StandCar_1, by = "Plot")
+            Alive.StandFactor3 <- left_join(Alive.StandFactor3, Dead.StandCar_1, by = "Plot")
           }
         }
       }
@@ -838,7 +838,7 @@ StandFactor <- function(D, Dmin = 5, Plot, S, TreeType = NULL, TreeClass = NULL,
     # 分林木类型的基本林分因子
     Alive.TreeClass <- data.frame("Plot" = rownames(Alive.TreeClass.Dg), Alive.TreeClass.Dg, Alive.TreeClass.Ba, Alive.TreeClass.N, Alive.TreeClass.SDI, Alive.TreeClass.aSDI, check.names = F)
     # 拼接
-    Alive.StandFactor3 <- dplyr::left_join(Alive.StandFactor3, Alive.TreeClass, by = "Plot")
+    Alive.StandFactor3 <- left_join(Alive.StandFactor3, Alive.TreeClass, by = "Plot")
 
     # 分林木类型的蓄积  # 2021-10-16， 补充计算其他类型木的蓄积
     if (!is.null(V)) {
@@ -852,7 +852,7 @@ StandFactor <- function(D, Dmin = 5, Plot, S, TreeType = NULL, TreeClass = NULL,
       colnames(Alive.TreeClass.V) <- Alive.TreeClass.V.names
       Alive.TreeClass.V <- data.frame("Plot" = rownames(Alive.TreeClass.V), Alive.TreeClass.V, check.name = F)
       # 拼接
-      Alive.StandFactor3 <- dplyr::left_join(Alive.StandFactor3, Alive.TreeClass.V, by = "Plot")
+      Alive.StandFactor3 <- left_join(Alive.StandFactor3, Alive.TreeClass.V, by = "Plot")
     }
     # 分林木类型的生物量  # 2021-10-16， 补充计算其他类型木的生物量
     if (!is.null(Biomass)) {
@@ -874,7 +874,7 @@ StandFactor <- function(D, Dmin = 5, Plot, S, TreeType = NULL, TreeClass = NULL,
             colnames(TreeClass.StandBio_i) <- paste0(TreeClass.StandBio_i.names, "_Bio_", i)
             TreeClass.StandBio_1 <- cbind(TreeClass.StandBio_1, TreeClass.StandBio_i)
           }
-          Alive.StandFactor3 <- dplyr::left_join(Alive.StandFactor3, TreeClass.StandBio_1, by = "Plot")
+          Alive.StandFactor3 <- left_join(Alive.StandFactor3, TreeClass.StandBio_1, by = "Plot")
         } else {
           TreeClass.StandBio_1 <- tapply(data.TreeClass.Bio[, 4 + 1] / 1000 / S, INDEX = list(data.TreeClass.Bio$Plot, data.TreeClass.Bio$TreeClass), FUN = sum)
           TreeClass.StandBio_1[is.na(TreeClass.StandBio_1)] <- 0
@@ -882,7 +882,7 @@ StandFactor <- function(D, Dmin = 5, Plot, S, TreeType = NULL, TreeClass = NULL,
           TreeClass.StandBio_1.names <- paste0(TreeClass.StandBio_1.names, "_Bio")
           colnames(TreeClass.StandBio_1) <- TreeClass.StandBio_1.names
           TreeClass.StandBio_1 <- data.frame("Plot" = rownames(TreeClass.StandBio_1), TreeClass.StandBio_1, check.name = F)
-          Alive.StandFactor3 <- dplyr::left_join(Alive.StandFactor3, TreeClass.StandBio_1, by = "Plot")
+          Alive.StandFactor3 <- left_join(Alive.StandFactor3, TreeClass.StandBio_1, by = "Plot")
         }
       }
     }
@@ -906,7 +906,7 @@ StandFactor <- function(D, Dmin = 5, Plot, S, TreeType = NULL, TreeClass = NULL,
             colnames(TreeClass.StandCar_i) <- paste0(TreeClass.StandCar_i.names, "_Car_", i)
             TreeClass.StandCar_1 <- cbind(TreeClass.StandCar_1, TreeClass.StandCar_i)
           }
-          Alive.StandFactor3 <- dplyr::left_join(Alive.StandFactor3, TreeClass.StandCar_1, by = "Plot")
+          Alive.StandFactor3 <- left_join(Alive.StandFactor3, TreeClass.StandCar_1, by = "Plot")
         } else {
           TreeClass.StandCar_1 <- tapply(data.TreeClass.Car[, 4 + 1] / 1000 / S, INDEX = list(data.TreeClass.Car$Plot, data.TreeClass.Car$TreeClass), FUN = sum)
           TreeClass.StandCar_1[is.na(TreeClass.StandCar_1)] <- 0
@@ -914,7 +914,7 @@ StandFactor <- function(D, Dmin = 5, Plot, S, TreeType = NULL, TreeClass = NULL,
           TreeClass.StandCar_1.names <- paste0(TreeClass.StandCar_1.names, "_Car")
           colnames(TreeClass.StandCar_1) <- TreeClass.StandCar_1.names
           TreeClass.StandCar_1 <- data.frame("Plot" = rownames(TreeClass.StandCar_1), TreeClass.StandCar_1)
-          Alive.StandFactor3 <- dplyr::left_join(Alive.StandFactor3, TreeClass.StandCar_1, by = "Plot")
+          Alive.StandFactor3 <- left_join(Alive.StandFactor3, TreeClass.StandCar_1, by = "Plot")
         }
       }
     }

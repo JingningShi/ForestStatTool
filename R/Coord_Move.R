@@ -31,7 +31,7 @@
 #' @export Coord_Move
 #' @name Coord_Move
 
-#' @import deldir
+#' @importFrom deldir duplicatedxy
 #' @import stats
 
 #' @examples ## 加载内置数据
@@ -81,7 +81,7 @@ Coord_Move <- function(Data, Plot, X, Y, Origin = c(0,0),Range_xy){
     Xi <- X[Plot==plotname[i]]
     Yi <- Y[Plot==plotname[i]]
     #重复坐标点检查
-    dupxy <- deldir::duplicatedxy(Xi,Yi)
+    dupxy <- duplicatedxy(Xi,Yi)
     # 何潇修改判断写法，2024-4-10
     if( any(dupxy) ){
       checkxy[i] <- T

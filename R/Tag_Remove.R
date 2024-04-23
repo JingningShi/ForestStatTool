@@ -26,7 +26,7 @@
 #' @export Tag_Remove
 #' @name Tag_Remove
 
-#' @import dplyr
+#' @importFrom dplyr arrange
 
 #' @examples ## 加载内置数据
 #' @examples data(ForestStatTool)
@@ -87,7 +87,7 @@ Tag_Remove <- function(Data, Plot, Tag, D){
   }else{
     cat("Duplicated Tags found and have been removed.\n")
     plotall <- plotall[,!colnames(plotall) %in% c("newTag","DD","duptags")]
-    plotall <- dplyr::arrange(plotall,Tag)
+    plotall <- arrange(plotall,Tag)
     return(plotall)
   }
 }

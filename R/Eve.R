@@ -59,7 +59,7 @@
 #' @export Eve
 #' @name Eve
 
-#' @import dplyr
+#' @importFrom dplyr left_join
 #' @import stats
 
 #' @examples ## 加载内置数据
@@ -230,7 +230,7 @@ Eve = function(Plot, D, SP, TreeType = NULL, Dmin = 5,  dClass = NULL, Index='Sp
   BAeve =specieseve(sum.ba)
   BAeve_out = data.frame("Plot"=rownames(as.data.frame(BAeve)), as.data.frame(BAeve)[,2:4])
 
-  Species_result = dplyr::left_join(Neve_out, BAeve_out, by = 'Plot')
+  Species_result = left_join(Neve_out, BAeve_out, by = 'Plot')
   colnames(Species_result) = c('Plot',
                                'N_GiniSimpson_Species_Eve',	'N_Simpson_Species_Eve',	'N_Shannon_Species_Eve',	  'Heip_Eve', 'McIntosh_Eve', 'SmithWilson_Eve',
                                'BA_GiniSimpson_Species_Eve',	'BA_Simpson_Species_Eve',	'BA_Shannon_Species_Eve')
@@ -273,7 +273,7 @@ Eve = function(Plot, D, SP, TreeType = NULL, Dmin = 5,  dClass = NULL, Index='Sp
   BAeve_dbhclass2 = specieseve(sum.ba.dbhclass2)
   BAeve_dbhclass2_out = data.frame("Plot"=rownames(as.data.frame(BAeve_dbhclass2)),as.data.frame(BAeve_dbhclass2)[,2:4])
 
-  Size_dClass2_result = dplyr::left_join(Neve_dbhclass2_out, BAeve_dbhclass2_out, by = 'Plot')
+  Size_dClass2_result = left_join(Neve_dbhclass2_out, BAeve_dbhclass2_out, by = 'Plot')
   colnames(Size_dClass2_result) = c('Plot',
                                     'N_GiniSimpson_Size2_Eve',	'N_Simpson_Size2_Eve',	'N_Shannon_Size2_Eve',
                                     'BA_GiniSimpson_Size2_Eve', 'BA_Simpson_Size2_Eve',	'BA_Shannon_Size2_Eve')
@@ -289,7 +289,7 @@ Eve = function(Plot, D, SP, TreeType = NULL, Dmin = 5,  dClass = NULL, Index='Sp
   BAeve_dbhclass4 = specieseve(sum.ba.dbhclass4)
   BAeve_dbhclass4_out = data.frame("Plot"=rownames(as.data.frame(BAeve_dbhclass4)),as.data.frame(BAeve_dbhclass4)[,2:4])
 
-  Size_dClass4_result = dplyr::left_join(Neve_dbhclass4_out, BAeve_dbhclass4_out, by = 'Plot')
+  Size_dClass4_result = left_join(Neve_dbhclass4_out, BAeve_dbhclass4_out, by = 'Plot')
   colnames(Size_dClass4_result) = c('Plot',
                                     'N_GiniSimpson_Size4_Eve',	'N_Simpson_Size4_Eve',	'N_Shannon_Size4_Eve',
                                     'BA_GiniSimpson_Size4_Eve', 'BA_Simpson_Size4_Eve',	'BA_Shannon_Size4_Eve')
@@ -315,7 +315,7 @@ Eve = function(Plot, D, SP, TreeType = NULL, Dmin = 5,  dClass = NULL, Index='Sp
   BAeve_SP_dbhclass2 = specieseve(sum.ba.sp.dbhclass2)
   BAeve_SP_dbhclass2_out = data.frame("Plot"=rownames(as.data.frame(BAeve_SP_dbhclass2)),as.data.frame(BAeve_SP_dbhclass2)[,2:4])
 
-  SS_dClass2_result = dplyr::left_join(Neve_sp_dbhclass2_out, BAeve_SP_dbhclass2_out, by = 'Plot')
+  SS_dClass2_result = left_join(Neve_sp_dbhclass2_out, BAeve_SP_dbhclass2_out, by = 'Plot')
   colnames(SS_dClass2_result) = c('Plot',
                                   'N_GiniSimpson_SS2_Eve',	'N_Simpson_SS2_Eve',	'N_Shannon_SS2_Eve',
                                   'BA_GiniSimpson_SS2_Eve', 'BA_Simpson_SS2_Eve',	'BA_Shannon_SS2_Eve')
@@ -331,7 +331,7 @@ Eve = function(Plot, D, SP, TreeType = NULL, Dmin = 5,  dClass = NULL, Index='Sp
   BAeve_SP_dbhclass4 = specieseve(sum.ba.sp.dbhclass4)
   BAeve_SP_dbhclass4_out = data.frame("Plot"=rownames(as.data.frame(BAeve_SP_dbhclass4)),as.data.frame(BAeve_SP_dbhclass4)[,2:4])
 
-  SS_dClass4_result = dplyr::left_join(Neve_sp_dbhclass4_out, BAeve_SP_dbhclass4_out, by = 'Plot')
+  SS_dClass4_result = left_join(Neve_sp_dbhclass4_out, BAeve_SP_dbhclass4_out, by = 'Plot')
   colnames(SS_dClass4_result) = c('Plot',
                                   'N_GiniSimpson_SS4_Eve',	'N_Simpson_SS4_Eve',	'N_Shannon_SS4_Eve',
                                   'BA_GiniSimpson_SS4_Eve', 'BA_Simpson_SS4_Eve',	'BA_Shannon_SS4_Eve')
@@ -352,7 +352,7 @@ Eve = function(Plot, D, SP, TreeType = NULL, Dmin = 5,  dClass = NULL, Index='Sp
       }
     }
     else{
-      Size_result = dplyr::left_join(Size_dClass2_result, Size_dClass4_result, by = 'Plot')
+      Size_result = left_join(Size_dClass2_result, Size_dClass4_result, by = 'Plot')
     }
     return(Size_result)
   }
@@ -366,25 +366,25 @@ Eve = function(Plot, D, SP, TreeType = NULL, Dmin = 5,  dClass = NULL, Index='Sp
       }
     }
     else{
-      SS_result = dplyr::left_join(SS_dClass2_result, SS_dClass4_result, by = 'Plot')
+      SS_result = left_join(SS_dClass2_result, SS_dClass4_result, by = 'Plot')
     }
     return(SS_result)
   }
   else if(Index=='ALL_2'){
-    result2 = dplyr::left_join(Species_result, Size_dClass2_result, by = 'Plot')
-    result2 = dplyr::left_join(result2, SS_dClass2_result, by = 'Plot')
+    result2 = left_join(Species_result, Size_dClass2_result, by = 'Plot')
+    result2 = left_join(result2, SS_dClass2_result, by = 'Plot')
     return(result2)
   }
   else if(Index=='ALL_4'){
-    result4 = dplyr::left_join(Species_result, Size_dClass4_result, by = 'Plot')
-    result4 = dplyr::left_join(result4, SS_dClass4_result, by = 'Plot')
+    result4 = left_join(Species_result, Size_dClass4_result, by = 'Plot')
+    result4 = left_join(result4, SS_dClass4_result, by = 'Plot')
     return(result4)
   }
   else if(Index=='ALL'){
-    Size_result = dplyr::left_join(Size_dClass2_result, Size_dClass4_result, by = 'Plot')
-    SS_result = dplyr::left_join(SS_dClass2_result, SS_dClass4_result, by = 'Plot')
-    result = dplyr::left_join(Species_result, Size_result, by = 'Plot')
-    result = dplyr::left_join(result, SS_result, by = 'Plot')
+    Size_result = left_join(Size_dClass2_result, Size_dClass4_result, by = 'Plot')
+    SS_result = left_join(SS_dClass2_result, SS_dClass4_result, by = 'Plot')
+    result = left_join(Species_result, Size_result, by = 'Plot')
+    result = left_join(result, SS_result, by = 'Plot')
     return(result)
   }
 }
